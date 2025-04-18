@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
+// import 'dart:math' as math;
 
 class AnimatedAddressIndicator extends StatefulWidget {
   final String address;
@@ -33,6 +33,7 @@ class _AnimatedAddressIndicatorState
   @override
   void initState() {
     super.initState();
+    
     _controller = AnimationController(
       duration: const Duration(milliseconds: 1500),
       vsync: this,
