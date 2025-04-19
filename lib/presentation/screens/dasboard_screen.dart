@@ -214,6 +214,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       AnimatedAddressIndicator(
+                                        // interval: const Interval(0.74, 0.94,
+                                        //     curve: Curves.easeInToLinear),
+                                        animations: animations,
                                         address: "Gladkova St., 25",
                                         onTap: () {
 // Handle tap event
@@ -257,7 +260,11 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               MainAxisAlignment.end,
                                           children: [
                                             AnimatedAddressIndicator(
-                                              address: "Gladkova St., 25",
+                                              interval: const Interval(
+                                                 0.88, 0.99,
+                                                  curve: Curves.easeInToLinear),
+                                              animations: animations,
+                                              address: "2 Gladkova St., 25",
                                               onTap: () {
 // Handle tap event
 
@@ -302,7 +309,12 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                   MainAxisAlignment.end,
                                               children: [
                                                 AnimatedAddressIndicator(
-                                                  address: "Gladkova St., 25",
+                                                  interval: const Interval(
+                                                      0.84, 0.97,
+                                                      curve: Curves
+                                                          .easeInToLinear),
+                                                  animations: animations,
+                                                  address: "3 Gladkova St., 25",
                                                   onTap: () {
 // Handle tap event
 
@@ -340,7 +352,12 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                   MainAxisAlignment.end,
                                               children: [
                                                 AnimatedAddressIndicator(
-                                                  address: "Gladkova St., 25",
+                                                  interval: const Interval(
+                                                        0.88, 0.99,
+                                                      curve: Curves
+                                                          .easeInToLinear),
+                                                  animations: animations,
+                                                  address: "4 Gladkova St., 25",
                                                   onTap: () {
 // Handle tap event
 

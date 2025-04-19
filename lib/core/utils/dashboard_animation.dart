@@ -16,7 +16,7 @@ class DashboardAnimations {
   DashboardAnimations(TickerProvider vsync) {
     controller = AnimationController(
       vsync: vsync,
-      duration: const Duration(milliseconds: 4000),
+      duration: const Duration(milliseconds: 5500),
     );
 
     fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
@@ -81,7 +81,7 @@ scaleOut = Tween<double>(begin: 0.0, end: 1.0).animate(
  sheetSizeAnimation = Tween<double>(begin: 0.0011, end: 0.6701).animate( // Animate initialChildSize
       CurvedAnimation(
         parent: controller,
-        curve: const Interval(0.73, 0.95, curve: Curves.fastOutSlowIn), // Adjust interval as needed
+        curve: const Interval(0.73, 0.85, curve: Curves.easeInOutSine), // Adjust interval as needed
       ),
     );
 

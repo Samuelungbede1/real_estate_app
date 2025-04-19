@@ -21,7 +21,7 @@ class AnimatedOfferCircle extends StatelessWidget {
                 parent: animations.controller,
                 curve: const Interval(
                   0.35, // Start at the beginning of the animation
-                  0.70,
+                  0.65,
                   curve: Curves.easeInToLinear,
                 ),
               ),
