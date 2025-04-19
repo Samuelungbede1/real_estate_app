@@ -16,16 +16,16 @@ class ExpandingProfileIcon extends StatelessWidget {
     return AnimatedBuilder(
       animation: animations.controller,
       builder: (context, child) {
-
         final scale = Tween<double>(begin: 0.0, end: 1.0)
-    .animate(CurvedAnimation(
-  parent: animations.controller,
-  curve: const Interval(
-    0.0, // Start at 30% of the animation duration
-    0.20,
-    curve: Curves.easeIn,
-  ),
-)).value;
+            .animate(CurvedAnimation(
+              parent: animations.controller,
+              curve: const Interval(
+                0.0, // Start at 30% of the animation duration
+                0.20,
+                curve: Curves.easeIn,
+              ),
+            ))
+            .value;
 
         // final scale = CurvedAnimation(
         //   parent: animations.controller,

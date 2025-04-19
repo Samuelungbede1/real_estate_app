@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:real_estate_app/core/utils/map_animation.dart';
 // import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MapScreen extends StatefulWidget {
@@ -10,11 +11,25 @@ class MapScreen extends StatefulWidget {
   _MapScreenState createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapScreenState extends State<MapScreen>
+    with SingleTickerProviderStateMixin {
   final MapController _mapController = MapController();
+  late MapAnimation animation;
+
+  @override
+  void initState() {
+    super.initState();
+    animation = MapAnimation(this); // 'this' is the TickerProvider
+  }
+
+  @override
+  void dispose() {
+    animation.dispose();
+    super.dispose();
+  }
 
   // Sample marker locations for Saint Petersburg
-  final List<LatLng> _markerLocations = [
+  final List<LatLng> _markerLocations = const [
     LatLng(59.9343, 30.3351), // Center
     LatLng(59.9398, 30.3006), // Peter and Paul Fortress
     LatLng(59.9339, 30.3061), // Hermitage
@@ -24,7 +39,6 @@ class _MapScreenState extends State<MapScreen> {
     LatLng(59.9127, 30.3010), // St. Isaac's Cathedral
     LatLng(59.9400, 30.3208), // Church of the Savior on Blood
   ];
-
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +83,7 @@ class _MapScreenState extends State<MapScreen> {
                           padding: const EdgeInsets.all(4),
                           decoration: const BoxDecoration(
                             color: Colors.orange,
-                            borderRadius:  BorderRadius.only(
+                            borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(12),
                               topRight: Radius.circular(12),
                               bottomRight: Radius.circular(12),
@@ -88,10 +102,10 @@ class _MapScreenState extends State<MapScreen> {
           ),
 
           // Status bar area
-          Container(
-            height: MediaQuery.of(context).padding.top,
-            color: Colors.black.withOpacity(0.5),
-          ),
+          // Container(
+          //   height: MediaQuery.of(context).padding.top,
+          //   color: Colors.black.withOpacity(0.1),
+          // ),
 
           // Search bar
           Positioned(
@@ -101,37 +115,69 @@ class _MapScreenState extends State<MapScreen> {
             child: Row(
               children: [
                 Expanded(
-                  child: Container(
-                    height: 45,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: const Row(
-                      children: [
-                         Icon(Icons.search, color: Colors.grey),
-                         SizedBox(width: 8),
-                         Text(
-                          'Saint Petersburg',
-                          style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 16,
+                  child: AnimatedBuilder(
+                    animation: animation.controller,
+                    builder: (context, child) {
+                      // A simpler approach with fewer potential issues
+                      return ScaleTransition(
+                        scale: animation.searchBarScale,
+                        alignment: Alignment.center,
+                        child: Container(
+                          height: 45,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: Row(
+                            children: [
+                              FadeTransition(
+                                opacity: animation.searchBarScale,
+                                child: const Icon(Icons.search,
+                                    color: Colors.grey),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: FadeTransition(
+                                  opacity: animation.searchBarWidth,
+                                  child: Text(
+                                    'Saint Petersburg',
+                                    style: const TextStyle(
+                                      color: Colors.black87,
+                                      fontSize: 16,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ),
-                const SizedBox(width: 8),
-                Container(
-                  height: 45,
-                  width: 45,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: const Icon(Icons.tune, color: Colors.grey),
+
+                const SizedBox(width: 10),
+
+                // Animated Filter/Tune Button
+                AnimatedBuilder(
+                  animation: animation.controller,
+                  builder: (context, child) {
+                    return ScaleTransition(
+                      scale: animation.filterIconScale,
+                      alignment: Alignment.center,
+                      child: Container(
+                        height: 45,
+                        width: 45,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: const Icon(Icons.tune, color: Colors.grey),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -143,24 +189,44 @@ class _MapScreenState extends State<MapScreen> {
             left: 16,
             child: Column(
               children: [
-                Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade700,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.layers_outlined, color: Colors.white),
+                AnimatedBuilder(
+                  animation: animation.controller,
+                  builder: (context, child) {
+                    return ScaleTransition(
+                      scale: animation.filterIconScale,
+                      alignment: Alignment.center,
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade700,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.layers_outlined,
+                            color: Colors.white),
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(height: 10),
-                Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade700,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.navigation_outlined, color: Colors.white),
+                AnimatedBuilder(
+                  animation: animation.controller,
+                  builder: (context, child) {
+                    return ScaleTransition(
+                      scale: animation.filterIconScale,
+                      alignment: Alignment.center,
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade700,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.navigation_outlined,
+                            color: Colors.white),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -170,33 +236,41 @@ class _MapScreenState extends State<MapScreen> {
           Positioned(
             bottom: 140,
             right: 16,
-            child: Container(
-              height: 35,
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade700,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.list, color: Colors.grey.shade300),
-                  const SizedBox(width: 8),
-                  Text(
-                    'List of variants',
-                    style: TextStyle(
-                      color: Colors.grey.shade300,
-                      fontSize: 12,
+            child: AnimatedBuilder(
+              animation: animation.controller,
+              builder: (context, child) {
+                // A simpler approach with fewer potential issues
+                return ScaleTransition(
+                  scale: animation.searchBarScale,
+                  alignment: Alignment.center,
+                  child: Container(
+                    height: 35,
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade700,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.list, color: Colors.grey.shade300),
+                        const SizedBox(width: 8),
+                        Text(
+                          'List of variants',
+                          style: TextStyle(
+                            color: Colors.grey.shade300,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ),
         ],
       ),
     );
   }
-
-
 }
