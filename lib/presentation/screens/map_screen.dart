@@ -32,18 +32,6 @@ class _MapScreenState extends State<MapScreen>
     super.dispose();
   }
 
-  // // Sample marker locations for Saint Petersburg
-  // final List<LatLng> _markerLocations = const [
-  //   LatLng(59.9343, 30.3351), // Center
-  //   LatLng(59.9398, 30.3006), // Peter and Paul Fortress
-  //   LatLng(59.9339, 30.3061), // Hermitage
-  //   LatLng(59.9339, 30.3171), // Hermitage
-  //   LatLng(59.9250, 30.2958), // Mariinsky Theatre
-  //   LatLng(59.9250, 30.3171), // Mariinsky Theatre
-  //   LatLng(59.9127, 30.3010), // St. Isaac's Cathedral
-  //   LatLng(59.9400, 30.3208), // Church of the Savior on Blood
-  // ];
-
 final List<LocationMarker> _markerLocations = const [
   LocationMarker(latLong: LatLng(59.9343, 30.3351), label: "13,mnp"),
   LocationMarker(latLong: LatLng(59.9398, 30.3006), label: "11 mnp"),
