@@ -19,13 +19,13 @@ class MapAnimation {
   MapAnimation(TickerProvider vsync) {
     controller = AnimationController(
       vsync: vsync,
-      duration: const Duration(milliseconds: 4000),
+      duration: const Duration(milliseconds: 5000),
     );
 
     fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: controller,
-        curve: const Interval(0, 0.5, curve: Curves.easeInOut),
+        curve: const Interval(0.4, 0.8, curve: Curves.easeInOut),
       ),
     );
 
@@ -54,14 +54,14 @@ class MapAnimation {
 
     widthAnimation = Tween<double>(begin: 0, end: 60).animate(
       CurvedAnimation(parent: controller, 
-        curve: const Interval(0.3, 0.45, curve: Curves.easeIn),
+        curve: const Interval(0.35, 0.5, curve: Curves.easeIn),
       ),
     );
 
-      heightAnimation = Tween<double>(begin: 0, end: 30).animate(
+      heightAnimation = Tween<double>(begin: 0, end: 35).animate(
       CurvedAnimation(
         parent: controller,
-        curve: const Interval(0.3, 0.45, curve: Curves.easeIn),
+        curve: const Interval(0.35, 0.5, curve: Curves.easeIn),
       ),
     );
 

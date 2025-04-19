@@ -19,7 +19,7 @@ class _MapScreenState extends State<MapScreen>
   void initState() {
     super.initState();
     animation = MapAnimation(this); // 'this' is the TickerProvider
-    
+
     // Ensure animation starts after build is complete
     WidgetsBinding.instance.addPostFrameCallback((_) {
       animation.controller.forward();
@@ -32,17 +32,29 @@ class _MapScreenState extends State<MapScreen>
     super.dispose();
   }
 
-  // Sample marker locations for Saint Petersburg
-  final List<LatLng> _markerLocations = const [
-    LatLng(59.9343, 30.3351), // Center
-    LatLng(59.9398, 30.3006), // Peter and Paul Fortress
-    LatLng(59.9339, 30.3061), // Hermitage
-    LatLng(59.9339, 30.3171), // Hermitage
-    LatLng(59.9250, 30.2958), // Mariinsky Theatre
-    LatLng(59.9250, 30.3171), // Mariinsky Theatre
-    LatLng(59.9127, 30.3010), // St. Isaac's Cathedral
-    LatLng(59.9400, 30.3208), // Church of the Savior on Blood
-  ];
+  // // Sample marker locations for Saint Petersburg
+  // final List<LatLng> _markerLocations = const [
+  //   LatLng(59.9343, 30.3351), // Center
+  //   LatLng(59.9398, 30.3006), // Peter and Paul Fortress
+  //   LatLng(59.9339, 30.3061), // Hermitage
+  //   LatLng(59.9339, 30.3171), // Hermitage
+  //   LatLng(59.9250, 30.2958), // Mariinsky Theatre
+  //   LatLng(59.9250, 30.3171), // Mariinsky Theatre
+  //   LatLng(59.9127, 30.3010), // St. Isaac's Cathedral
+  //   LatLng(59.9400, 30.3208), // Church of the Savior on Blood
+  // ];
+
+final List<LocationMarker> _markerLocations = const [
+  LocationMarker(latLong: LatLng(59.9343, 30.3351), label: "13,mnp"),
+  LocationMarker(latLong: LatLng(59.9398, 30.3006), label: "11 mnp"),
+  LocationMarker(latLong: LatLng(59.9339, 30.3061), label: "7,3 mnp"),
+  LocationMarker(latLong: LatLng(59.9339, 30.3171), label: "10,4 mnp"),
+  LocationMarker(latLong: LatLng(59.9350, 30.2958), label: "4,0 mnp"),
+  LocationMarker(latLong: LatLng(59.9250, 30.3171), label: "8 mnp"),
+  LocationMarker(latLong: LatLng(59.9309, 30.3010), label: "12,0 mnp"),
+  LocationMarker(latLong: LatLng(59.9340, 30.3308), label: "20,9 mnp"),
+];
+  
 
   @override
   Widget build(BuildContext context) {
@@ -71,53 +83,62 @@ class _MapScreenState extends State<MapScreen>
               ),
               MarkerLayer(
                 rotate: true,
-                markers: _markerLocations.map((point) => 
-                  Marker(
-                    width: 60, // Fixed outer width
-                    height: 35,
-                    point: point,
-                    child: AnimatedBuilder(
-                      animation: animation.controller, // Use controller directly
-                      builder: (context, child) {
-                        // Debug print to verify animation is running
-                        // print('Marker animation value: ${animation.widthAnimation.value}');
-                        
-                        return Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            width: animation.widthAnimation.value,
-                            height: animation.heightAnimation.value,
-                            padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: Colors.orange,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(12),
-                                topRight: Radius.circular(12),
-                                bottomRight: Radius.circular(12),
-                                bottomLeft: Radius.circular(0),
+                markers: _markerLocations
+                    .map(
+                      (point) => Marker(
+                        width: 60, // Fixed outer width
+                        height: 35,
+                        point: point.latLong,
+                        child: AnimatedBuilder(
+                          animation:
+                              animation.controller, // Use controller directly
+                          builder: (context, child) {
+                            // Debug print to verify animation is running
+                            // print('Marker animation value: ${animation.widthAnimation.value}');
+
+                            return Align(
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                width: animation.widthAnimation.value,
+                                height: animation.heightAnimation.value,
+                                padding: const EdgeInsets.all(4),
+                                decoration: const BoxDecoration(
+                                  color: Colors.orange,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(0),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    // Icon(Icons.business, color: Colors.white, size: 20),
+                                    // Uncomment for text that appears as marker expands
+                                    // SizedBox(width: 4),
+                                    Flexible(
+                                      child: FadeTransition(
+                                        opacity: animation.fadeAnimation,
+                                        child:   Text(
+                                          point.label,
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                // Icon(Icons.business, color: Colors.white, size: 20),
-                                // Uncomment for text that appears as marker expands
-                                // SizedBox(width: 4),
-                                // Flexible(
-                                //   child: Text(
-                                //     'Location',
-                                //     style: TextStyle(color: Colors.white, fontSize: 12),
-                                //     overflow: TextOverflow.ellipsis,
-                                //   ),
-                                // ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ).toList(),
+                            );
+                          },
+                        ),
+                      ),
+                    )
+                    .toList(),
               ),
             ],
           ),
@@ -147,7 +168,8 @@ class _MapScreenState extends State<MapScreen>
                             children: [
                               FadeTransition(
                                 opacity: animation.searchBarScale,
-                                child: const Icon(Icons.search, color: Colors.grey),
+                                child: const Icon(Icons.search,
+                                    color: Colors.grey),
                               ),
                               const SizedBox(width: 8),
                               Expanded(
@@ -215,7 +237,8 @@ class _MapScreenState extends State<MapScreen>
                           color: Colors.grey.shade700,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.layers_outlined, color: Colors.white),
+                        child: const Icon(Icons.layers_outlined,
+                            color: Colors.white),
                       ),
                     );
                   },
@@ -234,7 +257,8 @@ class _MapScreenState extends State<MapScreen>
                           color: Colors.grey.shade700,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.navigation_outlined, color: Colors.white),
+                        child: const Icon(Icons.navigation_outlined,
+                            color: Colors.white),
                       ),
                     );
                   },
@@ -279,9 +303,16 @@ class _MapScreenState extends State<MapScreen>
               },
             ),
           ),
-          
         ],
       ),
     );
   }
+}
+
+
+class LocationMarker {
+  final LatLng latLong;
+  final String label;
+
+  const LocationMarker({required this.latLong, required this.label});
 }
