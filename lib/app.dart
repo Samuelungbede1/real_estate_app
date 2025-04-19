@@ -34,7 +34,7 @@ class App extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           // fallbackLocale:
           //     const Locale(AppConstants.languageCode, AppConstants.countryCode),
-          title: 'Notifi',
+          title: 'RealEstate',
           theme: ThemeData.light(),
           themeMode: ThemeMode.light,
           initialRoute: AppRoutes.splashScreen,

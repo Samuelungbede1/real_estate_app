@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:real_estate_app/core/utils/dashboard_animation.dart';
 
 class AnimatedRentWidget extends StatelessWidget {
@@ -20,9 +19,23 @@ class AnimatedRentWidget extends StatelessWidget {
               CurvedAnimation(
                 parent: animations.controller,
                 curve: const Interval(
-                  0.35, // Start at the beginning of the animation
-                  0.65,
-                  curve: Curves.easeInToLinear,
+                  0.30,
+                  0.45,
+                  curve: Curves.easeIn,
+                ),
+              ),
+            )
+            .value;
+
+        // Number animation (0 to 2212)
+        final numberAnimation = IntTween(begin: 0, end: 2212)
+            .animate(
+              CurvedAnimation(
+                parent: animations.controller,
+                curve: const Interval(
+                  0.25,
+                  0.55,
+                  curve: Curves.linearToEaseOut,
                 ),
               ),
             )
@@ -34,7 +47,6 @@ class AnimatedRentWidget extends StatelessWidget {
             alignment: Alignment.center,
             child: Container(
               height: 180,
-              // width: 200,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
@@ -52,7 +64,7 @@ class AnimatedRentWidget extends StatelessWidget {
                     Column(
                       children: [
                         Text(
-                          '2,212',
+                          numberAnimation.toString(), // Animated number
                           style: const TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
