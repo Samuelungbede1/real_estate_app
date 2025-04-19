@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:real_estate_app/core/utils/map_animation.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -20,6 +19,11 @@ class _MapScreenState extends State<MapScreen>
   void initState() {
     super.initState();
     animation = MapAnimation(this); // 'this' is the TickerProvider
+    
+    // Ensure animation starts after build is complete
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      animation.controller.forward();
+    });
   }
 
   @override
@@ -60,54 +64,65 @@ class _MapScreenState extends State<MapScreen>
               TileLayer(
                 maxZoom: double.infinity,
                 retinaMode: true,
-                // urlTemplate: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png',
-
                 urlTemplate:
                     'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
                 subdomains: const ['a', 'b', 'c', 'd'],
                 userAgentPackageName: 'com.example.app',
-
-                // urlTemplate:
-                //     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                // subdomains: const ['a', 'b', 'c'],
-                // userAgentPackageName: 'com.example.app',
-                // backgroundColor: Colors.black,
               ),
               MarkerLayer(
-                markers: _markerLocations
-                    .map((point) => Marker(
-                        width: 30.0,
-                        height: 35.0,
-                        point: point,
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(
-                            color: Colors.orange,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(12),
-                              topRight: Radius.circular(12),
-                              bottomRight: Radius.circular(12),
-                              bottomLeft: Radius.circular(0), // sharp edge
+                rotate: true,
+                markers: _markerLocations.map((point) => 
+                  Marker(
+                    width: 60, // Fixed outer width
+                    height: 35,
+                    point: point,
+                    child: AnimatedBuilder(
+                      animation: animation.controller, // Use controller directly
+                      builder: (context, child) {
+                        // Debug print to verify animation is running
+                        // print('Marker animation value: ${animation.widthAnimation.value}');
+                        
+                        return Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            width: animation.widthAnimation.value,
+                            height: animation.heightAnimation.value,
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: Colors.orange,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(12),
+                                topRight: Radius.circular(12),
+                                bottomRight: Radius.circular(12),
+                                bottomLeft: Radius.circular(0),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: const [
+                                // Icon(Icons.business, color: Colors.white, size: 20),
+                                // Uncomment for text that appears as marker expands
+                                // SizedBox(width: 4),
+                                // Flexible(
+                                //   child: Text(
+                                //     'Location',
+                                //     style: TextStyle(color: Colors.white, fontSize: 12),
+                                //     overflow: TextOverflow.ellipsis,
+                                //   ),
+                                // ),
+                              ],
                             ),
                           ),
-                          child: const Icon(
-                            Icons.business,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        )))
-                    .toList(),
+                        );
+                      },
+                    ),
+                  ),
+                ).toList(),
               ),
             ],
           ),
 
-          // Status bar area
-          // Container(
-          //   height: MediaQuery.of(context).padding.top,
-          //   color: Colors.black.withOpacity(0.1),
-          // ),
-
-          // Search bar
+          // Search bar and other UI elements remain the same
           Positioned(
             top: MediaQuery.of(context).padding.top + 10,
             left: 16,
@@ -118,7 +133,6 @@ class _MapScreenState extends State<MapScreen>
                   child: AnimatedBuilder(
                     animation: animation.controller,
                     builder: (context, child) {
-                      // A simpler approach with fewer potential issues
                       return ScaleTransition(
                         scale: animation.searchBarScale,
                         alignment: Alignment.center,
@@ -133,8 +147,7 @@ class _MapScreenState extends State<MapScreen>
                             children: [
                               FadeTransition(
                                 opacity: animation.searchBarScale,
-                                child: const Icon(Icons.search,
-                                    color: Colors.grey),
+                                child: const Icon(Icons.search, color: Colors.grey),
                               ),
                               const SizedBox(width: 8),
                               Expanded(
@@ -202,8 +215,7 @@ class _MapScreenState extends State<MapScreen>
                           color: Colors.grey.shade700,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.layers_outlined,
-                            color: Colors.white),
+                        child: const Icon(Icons.layers_outlined, color: Colors.white),
                       ),
                     );
                   },
@@ -222,8 +234,7 @@ class _MapScreenState extends State<MapScreen>
                           color: Colors.grey.shade700,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.navigation_outlined,
-                            color: Colors.white),
+                        child: const Icon(Icons.navigation_outlined, color: Colors.white),
                       ),
                     );
                   },
@@ -239,7 +250,6 @@ class _MapScreenState extends State<MapScreen>
             child: AnimatedBuilder(
               animation: animation.controller,
               builder: (context, child) {
-                // A simpler approach with fewer potential issues
                 return ScaleTransition(
                   scale: animation.searchBarScale,
                   alignment: Alignment.center,
@@ -269,6 +279,7 @@ class _MapScreenState extends State<MapScreen>
               },
             ),
           ),
+          
         ],
       ),
     );

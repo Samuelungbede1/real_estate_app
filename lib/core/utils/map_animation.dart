@@ -13,6 +13,8 @@ class MapAnimation {
   late final Animation<double> searchBarScale;
   late final Animation<double> filterIconScale;
   late final Animation<double> searchBarWidth;
+  late final Animation<double> widthAnimation;
+  late final Animation<double> heightAnimation;
 
   MapAnimation(TickerProvider vsync) {
     controller = AnimationController(
@@ -50,18 +52,18 @@ class MapAnimation {
       ),
     );
 
+    widthAnimation = Tween<double>(begin: 0, end: 60).animate(
+      CurvedAnimation(parent: controller, 
+        curve: const Interval(0.3, 0.45, curve: Curves.easeIn),
+      ),
+    );
 
-      final scale = Tween<double>(begin: 0.0, end: 1.0)
-    .animate(CurvedAnimation(
-  parent: controller,
-  curve: const Interval(
-    0.0, // Start at 30% of the animation duration
-    0.20,
-    curve: Curves.easeIn,
-  ),
-)).value;
-
-    
+      heightAnimation = Tween<double>(begin: 0, end: 30).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: const Interval(0.3, 0.45, curve: Curves.easeIn),
+      ),
+    );
 
     controller.forward();
   }
