@@ -18,7 +18,9 @@ class _MapScreenState extends State<MapScreen> {
     LatLng(59.9343, 30.3351), // Center
     LatLng(59.9398, 30.3006), // Peter and Paul Fortress
     LatLng(59.9339, 30.3061), // Hermitage
+    LatLng(59.9339, 30.3171), // Hermitage
     LatLng(59.9250, 30.2958), // Mariinsky Theatre
+    LatLng(59.9250, 30.3171), // Mariinsky Theatre
     LatLng(59.9127, 30.3010), // St. Isaac's Cathedral
     LatLng(59.9400, 30.3208), // Church of the Savior on Blood
   ];
@@ -35,13 +37,15 @@ class _MapScreenState extends State<MapScreen> {
             options: const MapOptions(
               initialCenter:
                   LatLng(59.9339, 30.3061), // Saint Petersburg coordinates
-              initialZoom: 13.0,
-              minZoom: 10.0,
+              initialZoom: 14.0,
+              minZoom: 14.0,
               maxZoom: 28.0,
               backgroundColor: Colors.black,
             ),
             children: [
               TileLayer(
+                maxZoom: double.infinity,
+                retinaMode: true,
                 // urlTemplate: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png',
 
                 urlTemplate:
