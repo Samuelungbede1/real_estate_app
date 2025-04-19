@@ -398,7 +398,7 @@ AnimatedBuilder(
     );
   },
   child: Container(
-    height: 50,
+    height: 60,
     decoration: BoxDecoration(
       color: Colors.black.withOpacity(0.9),
       borderRadius: BorderRadius.circular(30),

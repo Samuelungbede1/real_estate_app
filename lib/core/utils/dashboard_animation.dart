@@ -82,11 +82,11 @@ scaleOut = Tween<double>(begin: 0.0, end: 1.0).animate(
  sheetSizeAnimation = Tween<double>(begin: 0.0011, end: 0.6701).animate( // Animate initialChildSize
       CurvedAnimation(
         parent: controller,
-        curve: const Interval(0.5, 0.62, curve: Curves.easeInOutSine), // Adjust interval as needed
+        curve: const Interval(0.40, 0.65, curve: Curves.easeInOutSine), // Adjust interval as needed
       ),
     );
 
-     bottomNavPosition = Tween<double>(begin: -100, end: 30).animate(
+     bottomNavPosition = Tween<double>(begin: -100, end: 65).animate(
     CurvedAnimation(
       parent: controller,
         curve: const Interval(0.85, 1.00, curve: Curves.easeInOut), // Adjust interval as needed
