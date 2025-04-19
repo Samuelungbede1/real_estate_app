@@ -296,7 +296,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                             decoration: const BoxDecoration(
                                               image: DecorationImage(
                                                 image: AssetImage(
-                                                    'assets/icons/large_room.png'), // Replace with your image path
+                                                    'assets/icons/sofa.png'), // Replace with your image path
 
                                                 fit: BoxFit
                                                     .cover, // Adjust how the image should fit
@@ -339,7 +339,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                             decoration: const BoxDecoration(
                                               image: DecorationImage(
                                                 image: AssetImage(
-                                                    'assets/icons/sofa.png'), // Replace with your image path
+                                                  'assets/icons/large_room.png'
+                                                    ), // Replace with your image path
 
                                                 fit: BoxFit
                                                     .cover, // Adjust how the image should fit
@@ -387,57 +388,35 @@ class _DashboardScreenState extends State<DashboardScreen>
             ),
           ),
 
-AnimatedBuilder(
-  animation: animations.controller,
-  builder: (context, child) {
-    return Positioned(
-      bottom: animations.bottomNavPosition.value,
-      left: 85,
-      right: 85,
-      child: child!,
-    );
-  },
-  child: Container(
-    height: 60,
-    decoration: BoxDecoration(
-      color: Colors.black.withOpacity(0.9),
-      borderRadius: BorderRadius.circular(30),
-    ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _buildNavItem(0, Icons.circle, true),
-        _buildNavItem(1, Icons.chat_bubble_outline, false),
-        _buildNavItem(2, Icons.camera_alt_outlined, false),
-        _buildNavItem(3, Icons.favorite_border, false),
-        _buildNavItem(4, Icons.person_outline, false),
-      ],
-    ),
-  ),
-)
+// AnimatedBuilder(
+//   animation: animations.controller,
+//   builder: (context, child) {
+//     return Positioned(
+//       bottom: animations.bottomNavPosition.value,
+//       left: 80,
+//       right: 80,
+//       child: child!,
+//     );
+//   },
+//   child: Container(
+//     height: 55,
+//     decoration: BoxDecoration(
+//       color: Colors.black.withOpacity(0.9),
+//       borderRadius: BorderRadius.circular(30),
+//     ),
+//     child: Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceAround,
+//       children: [
+//         _buildNavItem(0, Icons.search_rounded, true),
+//         _buildNavItem(1, Icons.messenger_outlined, false),
+//         _buildNavItem(2, Icons.home_filled, false),
+//         _buildNavItem(3, Icons.favorite, false),
+//         _buildNavItem(4, Icons.person_2_sharp, false),
+//       ],
+//     ),
+//   ),
+// )
 
-          // Positioned(
-          //   bottom: -100,
-          //   left: 85,
-          //   right: 85,
-          //   child: Container(
-          //     height: 50,
-          //     decoration: BoxDecoration(
-          //       color: Colors.black.withOpacity(0.9),
-          //       borderRadius: BorderRadius.circular(30),
-          //     ),
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //       children: [
-          //         _buildNavItem(0, Icons.circle, true),
-          //         _buildNavItem(1, Icons.chat_bubble_outline, false),
-          //         _buildNavItem(2, Icons.camera_alt_outlined, false),
-          //         _buildNavItem(3, Icons.favorite_border, false),
-          //         _buildNavItem(4, Icons.person_outline, false),
-          //       ],
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
@@ -534,28 +513,7 @@ AnimatedBuilder(
     );
   }
 
-  Widget _buildNavItem(int index, IconData icon, bool isSelected) {
-    return GestureDetector(
-      onTap: () {
-        // setState(() {
-        //   _selectedNavIndex = index;
-        // });
-      },
-      child: Container(
-        width: 38,
-        height: 38,
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.orange : Colors.transparent,
-          shape: BoxShape.circle,
-        ),
-        child: Icon(
-          icon,
-          color: isSelected ? Colors.white : Colors.white,
-          size: 16,
-        ),
-      ),
-    );
-  }
+
 
   //Animations
   Widget _buildAnimatedLocation(DashboardAnimations animations) {

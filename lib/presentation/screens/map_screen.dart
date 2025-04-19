@@ -23,7 +23,6 @@ class _MapScreenState extends State<MapScreen> {
     LatLng(59.9400, 30.3208), // Church of the Savior on Blood
   ];
 
-  int _selectedNavIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +34,10 @@ class _MapScreenState extends State<MapScreen> {
             mapController: _mapController,
             options: const MapOptions(
               initialCenter:
-                  LatLng(59.9343, 30.3351), // Saint Petersburg coordinates
+                  LatLng(59.9339, 30.3061), // Saint Petersburg coordinates
               initialZoom: 13.0,
               minZoom: 10.0,
-              maxZoom: 18.0,
+              maxZoom: 28.0,
               backgroundColor: Colors.black,
             ),
             children: [
@@ -59,11 +58,11 @@ class _MapScreenState extends State<MapScreen> {
               MarkerLayer(
                 markers: _markerLocations
                     .map((point) => Marker(
-                        width: 40.0,
-                        height: 40.0,
+                        width: 30.0,
+                        height: 35.0,
                         point: point,
                         child: Container(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(4),
                           decoration: const BoxDecoration(
                             color: Colors.orange,
                             borderRadius:  BorderRadius.only(
@@ -99,17 +98,17 @@ class _MapScreenState extends State<MapScreen> {
               children: [
                 Expanded(
                   child: Container(
-                    height: 50,
+                    height: 45,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(25),
                     ),
-                    child: Row(
+                    child: const Row(
                       children: [
-                        const Icon(Icons.search, color: Colors.grey),
-                        const SizedBox(width: 8),
-                        const Text(
+                         Icon(Icons.search, color: Colors.grey),
+                         SizedBox(width: 8),
+                         Text(
                           'Saint Petersburg',
                           style: TextStyle(
                             color: Colors.black87,
@@ -122,8 +121,8 @@ class _MapScreenState extends State<MapScreen> {
                 ),
                 const SizedBox(width: 8),
                 Container(
-                  height: 50,
-                  width: 50,
+                  height: 45,
+                  width: 45,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(25),
@@ -136,28 +135,28 @@ class _MapScreenState extends State<MapScreen> {
 
           // Bottom controls
           Positioned(
-            bottom: 100,
+            bottom: 140,
             left: 16,
             child: Column(
               children: [
                 Container(
-                  height: 50,
-                  width: 50,
+                  height: 40,
+                  width: 40,
                   decoration: BoxDecoration(
                     color: Colors.grey.shade700,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.my_location, color: Colors.white),
+                  child: const Icon(Icons.layers_outlined, color: Colors.white),
                 ),
                 const SizedBox(height: 10),
                 Container(
-                  height: 50,
-                  width: 50,
+                  height: 40,
+                  width: 40,
                   decoration: BoxDecoration(
                     color: Colors.grey.shade700,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.navigation, color: Colors.white),
+                  child: const Icon(Icons.navigation_outlined, color: Colors.white),
                 ),
               ],
             ),
@@ -165,13 +164,13 @@ class _MapScreenState extends State<MapScreen> {
 
           // List of variants button
           Positioned(
-            bottom: 100,
+            bottom: 140,
             right: 16,
             child: Container(
-              height: 40,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              height: 35,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
-                color: Colors.grey.shade800,
+                color: Colors.grey.shade700,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
@@ -183,33 +182,9 @@ class _MapScreenState extends State<MapScreen> {
                     'List of variants',
                     style: TextStyle(
                       color: Colors.grey.shade300,
-                      fontSize: 14,
+                      fontSize: 12,
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-
-          // Bottom navigation bar
-          Positioned(
-            bottom: 30,
-            left: 16,
-            right: 16,
-            child: Container(
-              height: 60,
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.8),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildNavItem(0, Icons.circle, true),
-                  _buildNavItem(1, Icons.chat_bubble_outline, false),
-                  _buildNavItem(2, Icons.camera_alt_outlined, false),
-                  _buildNavItem(3, Icons.favorite_border, false),
-                  _buildNavItem(4, Icons.person_outline, false),
                 ],
               ),
             ),
@@ -219,26 +194,5 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  Widget _buildNavItem(int index, IconData icon, bool isSelected) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedNavIndex = index;
-        });
-      },
-      child: Container(
-        width: 50,
-        height: 50,
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.orange : Colors.transparent,
-          shape: BoxShape.circle,
-        ),
-        child: Icon(
-          icon,
-          color: isSelected ? Colors.white : Colors.white,
-          size: 24,
-        ),
-      ),
-    );
-  }
+
 }
