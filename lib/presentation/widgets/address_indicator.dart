@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:real_estate_app/core/utils/dashboard_animation.dart';
 import 'dart:math' as math;
 
 class AnimatedAddressIndicator extends StatefulWidget {
@@ -8,6 +9,8 @@ class AnimatedAddressIndicator extends StatefulWidget {
   final double borderRadius;
   final double buttonSize;
   final EdgeInsetsGeometry padding;
+  final DashboardAnimations? animations;
+  final Interval? interval;
 
   const AnimatedAddressIndicator({
     Key? key,
@@ -16,7 +19,10 @@ class AnimatedAddressIndicator extends StatefulWidget {
     this.height = 52,
     this.borderRadius = 40,
     this.buttonSize = 50,
+    this.animations,
     this.padding = const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+    this.interval = const Interval(0.74, 0.94, curve: Curves.easeInToLinear),
+
   }) : super(key: key);
 
   @override
@@ -24,38 +30,34 @@ class AnimatedAddressIndicator extends StatefulWidget {
       _AnimatedAddressIndicatorState();
 }
 
-class _AnimatedAddressIndicatorState
-    extends State<AnimatedAddressIndicator>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class _AnimatedAddressIndicatorState extends State<AnimatedAddressIndicator> {
   late Animation<double> _animation;
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 1500),
-      vsync: this,
-    );
-
+ @override
+void initState() {
+  super.initState();
+  if (widget.animations != null) {
     _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeInOut,
+        parent: widget.animations!.controller,
+        curve: widget.interval!,
       ),
     );
+  } else {
+    _animation = const AlwaysStoppedAnimation<double>(1.0);
+    print("Warning: DashboardAnimations not provided to AnimatedAddressIndicator.");
   }
+}
 
-  void startAnimation() {
-    _controller.reset();
-    _controller.forward();
-  }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  // void startAnimation() {
+  //   if (widget.animations != null) {
+  //     widget.animations!.controller.reset();
+  //     widget.animations!.controller.forward();
+  //   } else {
+  //     print("Warning: Cannot start animation, DashboardAnimations not provided.");
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -74,15 +76,13 @@ class _AnimatedAddressIndicatorState
               builder: (context, child) {
                 final progress = _animation.value;
 
-                // Calculate the width of the container as it expands
                 final containerWidth =
                     buttonSize + (fullWidth - buttonSize) * progress;
 
                 return Stack(
                   children: [
-                    // Background container that expands from left to right
                     Positioned(
-                      left: 0, // Fixed left position
+                      left: 0,
                       child: Container(
                         width: containerWidth,
                         height: widget.height,
@@ -114,36 +114,27 @@ class _AnimatedAddressIndicatorState
                         ),
                       ),
                     ),
-
-                    // Button that moves with the expanding edge
-                    // Button that moves with the expanding edge
                     Positioned(
                       left: containerWidth - widget.buttonSize + 2,
                       top: (widget.height - widget.buttonSize) + 1,
-                      child: GestureDetector(
-                        onTap: () {
-                          startAnimation();
-                          widget.onTap();
-                        },
-                        child: Container(
-                          width: widget.buttonSize - 4,
-                          height: widget.buttonSize - 4,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 4,
-                                offset: Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.chevron_right,
-                            color: Colors.black54,
-                            size: 24,
-                          ),
+                      child: Container(
+                        width: widget.buttonSize - 4,
+                        height: widget.buttonSize - 4,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.chevron_right,
+                          color: Colors.black54,
+                          size: 24,
                         ),
                       ),
                     ),

@@ -1,10 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:real_estate_app/core/utils/assets.dart';
+import 'package:real_estate_app/core/utils/dashboard_animation.dart';
 import 'package:real_estate_app/presentation/widgets/address_indicator.dart';
+import 'package:real_estate_app/presentation/widgets/animated_location.dart';
+import 'package:real_estate_app/presentation/widgets/animated_offer_widget.dart';
+import 'package:real_estate_app/presentation/widgets/animated_rent_widget.dart';
 import 'package:real_estate_app/presentation/widgets/custom_icon.dart';
+import 'package:real_estate_app/presentation/widgets/expanding_profile_icon.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen>
+    with SingleTickerProviderStateMixin {
+  late DashboardAnimations animations;
+
+  @override
+  void initState() {
+    super.initState();
+    animations = DashboardAnimations(this); // 'this' is the TickerProvider
+  }
+
+  @override
+  void dispose() {
+    animations.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,100 +53,105 @@ class DashboardScreen extends StatelessWidget {
             ),
           ),
 
-          // Foreground Content (safe area + scrollable)
           SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Top bar
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        height: 45,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: const Row(
-                          children: [
-                            Icon(Icons.location_on_rounded,
-                                size: 16, color: Colors.brown),
-                            SizedBox(width: 8),
-                            Text(
-                              'Saint Petersburg',
-                              style: TextStyle(
-                                color: Colors.brown,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
+                      ExpandingLocationWidget(
+                        location: 'Saint Petersburg',
+                        animations:
+                            animations, // Your DashboardAnimations instance
                       ),
                       const SizedBox(width: 8),
-                      Container(
-                        height: 45,
-                        width: 45,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape
-                              .circle, // This ensures the container is circular
-                        ),
-                        child: const ClipOval(
-                          child: CustomIcon(
-                            fit: BoxFit.fill,
-                            showImage: true,
-                            Assets.profileImage,
-                            size:
-                                50, // Set size equal to container size for a perfect circle
-                          ),
-                        ),
-                      )
+                      ExpandingProfileIcon(animations: animations),
                     ],
                   ),
                   const SizedBox(height: 20),
 
                   // Greeting
-                  const Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Hi Marina,",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey,
+                      FadeTransition(
+                        opacity: CurvedAnimation(
+                          parent: animations.controller,
+                          curve: const Interval(
+                            0.25, // delay start (65% into the main animation timeline)
+                            .50, // ends at 60%
+                            curve: Curves.easeIn,
+                          ),
+                        ),
+                        child: const Text(
+                          'Hi, Marina',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey,
+                          ),
+                          maxLines: 1,
                         ),
                       ),
-                      Text(
-                        "Let's select your \nperfect place",
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                      // // ⬇️ Add this for animated reveal
+                      // AnimatedBuilder(
+                      //   animation: animations.controller,
+                      //   builder: (context, child) {
+                      //     return ClipRect(
+                      //       child: Align(
+                      //         alignment: Alignment.topLeft,
+                      //         heightFactor: animations.revealAnimation
+                      //             .value, // Use the revealAnimation here!
+                      //         child: const Text(
+                      //           "Let's select your \nperfect place",
+                      //           style: const TextStyle(
+                      //             fontSize: 28,
+                      //             fontWeight: FontWeight.bold,
+                      //             color: Colors.black87,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     );
+                      //   },
+                      // )
+
+                      ClipRect(
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          heightFactor: 1,
+                          child: SlideTransition(
+                            position: animations.perfectPlaceSlide,
+                            child: const Text(
+                              "Let's select your \nperfect place",
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                      )
                     ],
                   ),
 
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
                   Row(
                     children: [
-                      _offerCardRound("BUY", "034", Colors.deepOrange),
-                      const SizedBox(width: 16),
-                      _offerCard("RENT", "2,212", Colors.white, darkText: true),
+                      // Assuming you have initialized your DashboardAnimations instance as 'animations'
+
+                      AnimatedOfferCircle(animations: animations),
+
+                      SizedBox(
+                        width: 10,
+                      ),
+                      AnimatedRentWidget(animations: animations)
                     ],
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 10),
                 ],
               ),
             ),
@@ -130,180 +160,228 @@ class DashboardScreen extends StatelessWidget {
           // Floating White Foreground Sheet
           Align(
             alignment: Alignment.bottomCenter,
-            child: DraggableScrollableSheet(
-              initialChildSize: 0.3, // 30% of screen height
-              minChildSize: 0.101,
-              maxChildSize: 0.71,
-              builder:
-                  (BuildContext context, ScrollController scrollController) {
-                return Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(32),
-                      topRight: Radius.circular(32),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 10,
-                        // offset: Offset(0, -2),
-                      )
-                    ],
-                  ),
-                  child: ListView(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.zero,
-                    controller: scrollController,
-                    children: [
-                      // Staggered grid with colored containers
-                      Column(
+            child: AnimatedBuilder(
+              animation: animations.controller,
+              builder: (context, child) {
+                return DraggableScrollableSheet(
+                  initialChildSize: animations.sheetSizeAnimation.value,
+                  minChildSize: 0.0006,
+                  maxChildSize: 0.68,
+                  builder: (BuildContext context,
+                      ScrollController scrollController) {
+                    return Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(32),
+                          topRight: Radius.circular(32),
+                        ),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 10,
+                            // offset: Offset(0, -2),
+                          )
+                        ],
+                      ),
+                      child: ListView(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        controller: scrollController,
                         children: [
-                          // Top full-width container
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(24),
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      'assets/icons/study.png'), // Replace with your image path
-                                  fit: BoxFit
-                                      .cover, // Adjust how the image should fit
+                          // Staggered grid with colored containers
+
+                          Column(
+                            children: [
+// Top full-width container
+
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(24),
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          'assets/icons/study.png'), // Replace with your image path
+
+                                      fit: BoxFit
+                                          .cover, // Adjust how the image should fit
+                                    ),
+                                  ),
+                                  height: 190,
+                                  width: double.infinity,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      AnimatedAddressIndicator(
+                                        // interval: const Interval(0.74, 0.94,
+                                        //     curve: Curves.easeInToLinear),
+                                        animations: animations,
+                                        address: "Gladkova St., 25",
+                                        onTap: () {
+// Handle tap event
+
+                                          print("Address indicator tapped");
+                                        },
+                                      ),
+                                      const SizedBox(height: 10),
+                                    ],
+                                  ),
                                 ),
                               ),
-                              height: 190,
-                              width: double.infinity,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
+
+                              const SizedBox(height: 8),
+
+// Bottom row with vertical container on left and two stacked containers on right
+
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  AnimatedAddressIndicator(
-                                    address: "Gladkova St., 25",
-                                    onTap: () {
-                                      // Handle tap event
-                                      print("Address indicator tapped");
-                                    },
-                                  ),
-                                  const SizedBox(height: 10),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          // Bottom row with vertical container on left and two stacked containers on right
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Left vertical container
-                              Expanded(
-                                flex: 1,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(24),
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/icons/hall_way.png'), // Replace with your image path
-                                        fit: BoxFit
-                                            .cover, // Adjust how the image should fit
+// Left vertical container
+
+                                  Expanded(
+                                    flex: 1,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(24),
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          image: DecorationImage(
+                                            image: AssetImage(
+                                                'assets/icons/hall_way.png'), // Replace with your image path
+
+                                            fit: BoxFit
+                                                .cover, // Adjust how the image should fit
+                                          ),
+                                        ),
+                                        height: 320,
+                                        width: double.infinity,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            AnimatedAddressIndicator(
+                                              interval: const Interval(
+                                                 0.88, 0.99,
+                                                  curve: Curves.easeInToLinear),
+                                              animations: animations,
+                                              address: "2 Gladkova St., 25",
+                                              onTap: () {
+// Handle tap event
+
+                                                print(
+                                                    "Address indicator tapped");
+                                              },
+                                            ),
+                                            const SizedBox(height: 10),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                    height: 320,
-                                    width: double.infinity,
+                                  ),
+
+                                  const SizedBox(width: 8),
+
+// Right column with two stacked containers
+
+                                  Expanded(
+                                    flex: 1,
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        AnimatedAddressIndicator(
-                                          address: "Gladkova St., 25",
-                                          onTap: () {
-                                            // Handle tap event
-                                            print("Address indicator tapped");
-                                          },
+// Top right container
+
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(24),
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/icons/large_room.png'), // Replace with your image path
+
+                                                fit: BoxFit
+                                                    .cover, // Adjust how the image should fit
+                                              ),
+                                            ),
+                                            height: 156,
+                                            width: double.infinity,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                AnimatedAddressIndicator(
+                                                  interval: const Interval(
+                                                      0.84, 0.97,
+                                                      curve: Curves
+                                                          .easeInToLinear),
+                                                  animations: animations,
+                                                  address: "3 Gladkova St., 25",
+                                                  onTap: () {
+// Handle tap event
+
+                                                    print(
+                                                        "Address indicator tapped");
+                                                  },
+                                                ),
+                                                const SizedBox(height: 10),
+                                              ],
+                                            ),
+                                          ),
                                         ),
-                                        const SizedBox(height: 10),
+
+                                        const SizedBox(height: 8),
+
+// Bottom right container
+
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(24),
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/icons/sofa.png'), // Replace with your image path
+
+                                                fit: BoxFit
+                                                    .cover, // Adjust how the image should fit
+                                              ),
+                                            ),
+                                            height: 156,
+                                            width: double.infinity,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                AnimatedAddressIndicator(
+                                                  interval: const Interval(
+                                                        0.88, 0.99,
+                                                      curve: Curves
+                                                          .easeInToLinear),
+                                                  animations: animations,
+                                                  address: "4 Gladkova St., 25",
+                                                  onTap: () {
+// Handle tap event
+
+                                                    print(
+                                                        "Address indicator tapped");
+                                                  },
+                                                ),
+                                                const SizedBox(height: 10),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              // Right column with two stacked containers
-                              Expanded(
-                                flex: 1,
-                                child: Column(
-                                  children: [
-                                    // Top right container
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(24),
-                                      child: Container(
-                                        decoration: const BoxDecoration(
-                                          image: DecorationImage(
-                                            image: AssetImage(
-                                                'assets/icons/large_room.png'), // Replace with your image path
-                                            fit: BoxFit
-                                                .cover, // Adjust how the image should fit
-                                          ),
-                                        ),
-                                        height: 156,
-                                        width: double.infinity,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            AnimatedAddressIndicator(
-                                              address: "Gladkova St., 25",
-                                              onTap: () {
-                                                // Handle tap event
-                                                print(
-                                                    "Address indicator tapped");
-                                              },
-                                            ),
-                                            const SizedBox(height: 10),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    // Bottom right container
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(24),
-                                      child: Container(
-                                        decoration: const BoxDecoration(
-                                          image: DecorationImage(
-                                            image: AssetImage(
-                                                'assets/icons/sofa.png'), // Replace with your image path
-                                            fit: BoxFit
-                                                .cover, // Adjust how the image should fit
-                                          ),
-                                        ),
-                                        height: 156,
-                                        width: double.infinity,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            AnimatedAddressIndicator(
-                                              address: "Gladkova St., 25",
-                                              onTap: () {
-                                                // Handle tap event
-                                                print(
-                                                    "Address indicator tapped");
-                                              },
-                                            ),
-                                            const SizedBox(height: 10),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                ],
                               ),
                             ],
                           ),
+                          // Your existing content here...
                         ],
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 );
               },
             ),
@@ -445,6 +523,52 @@ class DashboardScreen extends StatelessWidget {
           icon,
           color: isSelected ? Colors.white : Colors.white,
           size: 16,
+        ),
+      ),
+    );
+  }
+
+  //Animations
+  Widget _buildAnimatedLocation(DashboardAnimations animations) {
+    return SlideTransition(
+      position: Tween<Offset>(
+        begin: const Offset(-0.5, 0),
+        end: Offset.zero,
+      ).animate(
+        CurvedAnimation(
+          parent: animations.controller,
+          curve: const Interval(0.1, 0.5, curve: Curves.easeInOut),
+        ),
+      ),
+      child: FadeTransition(
+        opacity: animations.fadeAnimation,
+        child: Container(
+          height: 45,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: const Row(
+            children: [
+              Icon(Icons.location_on_rounded, size: 16, color: Colors.brown),
+              SizedBox(width: 8),
+              Text(
+                'Saint Petersburg',
+                style: TextStyle(
+                  color: Colors.brown,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
