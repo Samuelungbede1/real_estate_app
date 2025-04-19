@@ -27,8 +27,8 @@ class _ExpandingLocationWidgetState extends State<ExpandingLocationWidget>
           parent: widget.animations.controller,
           curve: const Interval(
             0.0,
-            0.78,
-            curve: Curves.fastEaseInToSlowEaseOut,
+            0.20,
+            curve: Curves.easeIn,
           ),
           // curve: Curves.fastEaseInToSlowEaseOut,
         ).value;

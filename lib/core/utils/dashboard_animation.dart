@@ -9,14 +9,15 @@ class DashboardAnimations {
   late final Animation<Offset> perfectPlaceSlide;
   late final Animation<double> revealAnimation;
   late Animation<double> scaleOut;
-  late final Animation<double> sheetSizeAnimation; // New animation for the sheet size
+  late final Animation<double> sheetSizeAnimation;
+  late final Animation<double> bottomNavPosition; 
 
 
 
   DashboardAnimations(TickerProvider vsync) {
     controller = AnimationController(
       vsync: vsync,
-      duration: const Duration(milliseconds: 5500),
+      duration: const Duration(milliseconds: 5900),
     );
 
     fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
@@ -40,7 +41,7 @@ perfectPlaceSlide = Tween<Offset>(
 ).animate(
   CurvedAnimation(
     parent: controller,
-    curve: const Interval(0.30, 0.5, curve: Curves.easeOut),
+    curve: const Interval(0.15, 0.45, curve: Curves.easeIn),
   ),
 );
 
@@ -51,7 +52,7 @@ perfectPlaceFade = Tween<double>(
 ).animate(
   CurvedAnimation(
     parent: controller,
-    curve: const Interval(0.30, 0.5, curve: Curves.easeOut),
+    curve: const Interval(0.10, 0.45, curve: Curves.easeOut),
   ),
 );
 
@@ -81,9 +82,16 @@ scaleOut = Tween<double>(begin: 0.0, end: 1.0).animate(
  sheetSizeAnimation = Tween<double>(begin: 0.0011, end: 0.6701).animate( // Animate initialChildSize
       CurvedAnimation(
         parent: controller,
-        curve: const Interval(0.73, 0.85, curve: Curves.easeInOutSine), // Adjust interval as needed
+        curve: const Interval(0.5, 0.62, curve: Curves.easeInOutSine), // Adjust interval as needed
       ),
     );
+
+     bottomNavPosition = Tween<double>(begin: -100, end: 30).animate(
+    CurvedAnimation(
+      parent: controller,
+        curve: const Interval(0.85, 1.00, curve: Curves.easeInOut), // Adjust interval as needed
+    ),
+  );
 
 
     controller.forward();

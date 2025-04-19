@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:real_estate_app/core/utils/dashboard_animation.dart';
 
 class AnimatedOfferCircle extends StatelessWidget {
@@ -12,31 +11,40 @@ class AnimatedOfferCircle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final countAnimation = IntTween(begin: 0, end: 1034).animate(
+      CurvedAnimation(
+        parent: animations.controller,
+        curve: const Interval(
+          0.25, // slightly after the scale animation begins
+          0.55,
+          curve: Curves.linearToEaseOut,
+        ),
+      ),
+    );
+
+    final scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: animations.controller,
+        curve: const Interval(
+          0.30,
+          0.45,
+          curve: Curves.easeIn,
+        ),
+      ),
+    );
+
     return AnimatedBuilder(
       animation: animations.controller,
       builder: (context, child) {
-        final scale = Tween<double>(begin: 0.0, end: 1.0)
-            .animate(
-              CurvedAnimation(
-                parent: animations.controller,
-                curve: const Interval(
-                  0.35, // Start at the beginning of the animation
-                  0.65,
-                  curve: Curves.easeInToLinear,
-                ),
-              ),
-            )
-            .value;
-
         return Transform.scale(
-          scale: scale,
+          scale: scaleAnimation.value,
           alignment: Alignment.center,
           child: Container(
-            width: 180, // Set width and height to the same value
+            width: 180,
             height: 180,
             decoration: BoxDecoration(
               color: Colors.orange,
-              borderRadius: BorderRadius.circular(100), // Makes it circular
+              borderRadius: BorderRadius.circular(100),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -50,14 +58,13 @@ class AnimatedOfferCircle extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      '1034',
-                      style: TextStyle(
+                      '${countAnimation.value}',
+                      style: const TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        color: false ? Colors.black87 : Colors.white,
+                        color: Colors.white,
                       ),
                     ),
-                    // const SizedBox(height: 4),
                     const Text(
                       "offers",
                       style: TextStyle(

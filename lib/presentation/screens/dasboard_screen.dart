@@ -81,8 +81,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                         opacity: CurvedAnimation(
                           parent: animations.controller,
                           curve: const Interval(
-                            0.25, // delay start (65% into the main animation timeline)
-                            .50, // ends at 60%
+                            0.15, // delay start (65% into the main animation timeline)
+                            .25, // ends at 60%
                             curve: Curves.easeIn,
                           ),
                         ),
@@ -214,8 +214,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       AnimatedAddressIndicator(
-                                        // interval: const Interval(0.74, 0.94,
-                                        //     curve: Curves.easeInToLinear),
+                                        interval: const Interval(0.55, 0.70,
+                                            curve: Curves.easeInToLinear),
                                         animations: animations,
                                         address: "Gladkova St., 25",
                                         onTap: () {
@@ -261,7 +261,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                           children: [
                                             AnimatedAddressIndicator(
                                               interval: const Interval(
-                                                 0.88, 0.99,
+                                                 0.70, 0.80,
                                                   curve: Curves.easeInToLinear),
                                               animations: animations,
                                               address: "2 Gladkova St., 25",
@@ -310,7 +310,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               children: [
                                                 AnimatedAddressIndicator(
                                                   interval: const Interval(
-                                                      0.84, 0.97,
+                                                      0.65, 0.75,
                                                       curve: Curves
                                                           .easeInToLinear),
                                                   animations: animations,
@@ -353,7 +353,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               children: [
                                                 AnimatedAddressIndicator(
                                                   interval: const Interval(
-                                                        0.88, 0.99,
+                                                        0.70, 0.80,
                                                       curve: Curves
                                                           .easeInToLinear),
                                                   animations: animations,
@@ -387,28 +387,57 @@ class _DashboardScreenState extends State<DashboardScreen>
             ),
           ),
 
-          Positioned(
-            bottom: 30,
-            left: 85,
-            right: 85,
-            child: Container(
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.9),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildNavItem(0, Icons.circle, true),
-                  _buildNavItem(1, Icons.chat_bubble_outline, false),
-                  _buildNavItem(2, Icons.camera_alt_outlined, false),
-                  _buildNavItem(3, Icons.favorite_border, false),
-                  _buildNavItem(4, Icons.person_outline, false),
-                ],
-              ),
-            ),
-          ),
+AnimatedBuilder(
+  animation: animations.controller,
+  builder: (context, child) {
+    return Positioned(
+      bottom: animations.bottomNavPosition.value,
+      left: 85,
+      right: 85,
+      child: child!,
+    );
+  },
+  child: Container(
+    height: 50,
+    decoration: BoxDecoration(
+      color: Colors.black.withOpacity(0.9),
+      borderRadius: BorderRadius.circular(30),
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        _buildNavItem(0, Icons.circle, true),
+        _buildNavItem(1, Icons.chat_bubble_outline, false),
+        _buildNavItem(2, Icons.camera_alt_outlined, false),
+        _buildNavItem(3, Icons.favorite_border, false),
+        _buildNavItem(4, Icons.person_outline, false),
+      ],
+    ),
+  ),
+)
+
+          // Positioned(
+          //   bottom: -100,
+          //   left: 85,
+          //   right: 85,
+          //   child: Container(
+          //     height: 50,
+          //     decoration: BoxDecoration(
+          //       color: Colors.black.withOpacity(0.9),
+          //       borderRadius: BorderRadius.circular(30),
+          //     ),
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //       children: [
+          //         _buildNavItem(0, Icons.circle, true),
+          //         _buildNavItem(1, Icons.chat_bubble_outline, false),
+          //         _buildNavItem(2, Icons.camera_alt_outlined, false),
+          //         _buildNavItem(3, Icons.favorite_border, false),
+          //         _buildNavItem(4, Icons.person_outline, false),
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

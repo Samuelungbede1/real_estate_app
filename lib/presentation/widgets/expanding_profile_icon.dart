@@ -22,8 +22,8 @@ class ExpandingProfileIcon extends StatelessWidget {
   parent: animations.controller,
   curve: const Interval(
     0.0, // Start at 30% of the animation duration
-    0.45,
-    curve: Curves.linearToEaseOut,
+    0.20,
+    curve: Curves.easeIn,
   ),
 )).value;
 
