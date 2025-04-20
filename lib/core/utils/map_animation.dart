@@ -16,6 +16,9 @@ class MapAnimation {
   late final Animation<double> widthAnimation;
   late final Animation<double> heightAnimation;
 
+  // late final Animation<double> dialogWidthAnimation;
+  // late final Animation<double>  dialogHeightAnimation;
+
   MapAnimation(TickerProvider vsync) {
     controller = AnimationController(
       vsync: vsync,
@@ -64,6 +67,17 @@ class MapAnimation {
         curve: const Interval(0.35, 0.5, curve: Curves.easeIn),
       ),
     );
+
+
+
+
+    // widthAnimation = Tween<double>(begin: 0, end: 170).animate(
+    //   CurvedAnimation(parent: controller, curve: Curves.easeOut),
+    // );
+
+    // dialogHeightAnimation = Tween<double>(begin: 0, end: 200).animate(
+    //   CurvedAnimation(parent: controller, curve: Curves.easeOut),
+    // );
 
     controller.forward();
   }

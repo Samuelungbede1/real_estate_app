@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:real_estate_app/core/utils/map_animation.dart';
+import 'package:real_estate_app/presentation/widgets/animated_layer_dialog.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -14,6 +15,9 @@ class _MapScreenState extends State<MapScreen>
     with SingleTickerProviderStateMixin {
   final MapController _mapController = MapController();
   late MapAnimation animation;
+
+  bool _showLayerOptions = false;
+  String _selectedLayer = "Without any layer";
 
   @override
   void initState() {
@@ -32,17 +36,32 @@ class _MapScreenState extends State<MapScreen>
     super.dispose();
   }
 
-final List<LocationMarker> _markerLocations = const [
-  LocationMarker(latLong: LatLng(59.9343, 30.3351), label: "13,mnp"),
-  LocationMarker(latLong: LatLng(59.9398, 30.3006), label: "11 mnp"),
-  LocationMarker(latLong: LatLng(59.9339, 30.3061), label: "7,3 mnp"),
-  LocationMarker(latLong: LatLng(59.9339, 30.3171), label: "10,4 mnp"),
-  LocationMarker(latLong: LatLng(59.9350, 30.2958), label: "4,0 mnp"),
-  LocationMarker(latLong: LatLng(59.9250, 30.3171), label: "8 mnp"),
-  LocationMarker(latLong: LatLng(59.9309, 30.3010), label: "12,0 mnp"),
-  LocationMarker(latLong: LatLng(59.9340, 30.3308), label: "20,9 mnp"),
-];
-  
+  final List<LocationMarker> _markerLocations = const [
+    LocationMarker(latLong: LatLng(59.9343, 30.3351), label: "13,mnp"),
+    LocationMarker(latLong: LatLng(59.9398, 30.3006), label: "11 mnp"),
+    LocationMarker(latLong: LatLng(59.9339, 30.3061), label: "7,3 mnp"),
+    LocationMarker(latLong: LatLng(59.9339, 30.3171), label: "10,4 mnp"),
+    LocationMarker(latLong: LatLng(59.9350, 30.2958), label: "4,0 mnp"),
+    LocationMarker(latLong: LatLng(59.9250, 30.3171), label: "8 mnp"),
+    LocationMarker(latLong: LatLng(59.9309, 30.3010), label: "12,0 mnp"),
+    LocationMarker(latLong: LatLng(59.9340, 30.3308), label: "20,9 mnp"),
+  ];
+
+  void _toggleLayerOptions() {
+    print('tap');
+    setState(() {
+      print('tap');
+      _showLayerOptions = !_showLayerOptions;
+    });
+  }
+
+  void _selectLayer(String layer) {
+    setState(() {
+      _selectedLayer = layer;
+      // _showLayerOptions = false;
+    });
+    // Here you would implement the logic to change the map layer
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,13 +122,11 @@ final List<LocationMarker> _markerLocations = const [
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    // Icon(Icons.business, color: Colors.white, size: 20),
-                                    // Uncomment for text that appears as marker expands
-                                    // SizedBox(width: 4),
+                                    
                                     Flexible(
                                       child: FadeTransition(
                                         opacity: animation.fadeAnimation,
-                                        child:   Text(
+                                        child: Text(
                                           point.label,
                                           style: const TextStyle(
                                               color: Colors.white,
@@ -163,9 +180,9 @@ final List<LocationMarker> _markerLocations = const [
                               Expanded(
                                 child: FadeTransition(
                                   opacity: animation.searchBarWidth,
-                                  child: Text(
+                                  child: const Text(
                                     'Saint Petersburg',
-                                    style: const TextStyle(
+                                    style:  TextStyle(
                                       color: Colors.black87,
                                       fontSize: 16,
                                     ),
@@ -212,26 +229,36 @@ final List<LocationMarker> _markerLocations = const [
             left: 16,
             child: Column(
               children: [
-                AnimatedBuilder(
-                  animation: animation.controller,
-                  builder: (context, child) {
-                    return ScaleTransition(
-                      scale: animation.filterIconScale,
-                      alignment: Alignment.center,
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade700,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(Icons.layers_outlined,
-                            color: Colors.white),
-                      ),
-                    );
+                // Layer button - Fixed version
+                GestureDetector(
+                  onTap: () {
+                    print('TAPPED - Layer Button');
+                    _toggleLayerOptions();
                   },
+                  child: AnimatedBuilder(
+                    animation: animation.controller,
+                    builder: (context, child) {
+                      return ScaleTransition(
+                        scale: animation.filterIconScale,
+                        alignment: Alignment.center,
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade700,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.layers_outlined,
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
                 const SizedBox(height: 10),
+                // Navigation button
                 AnimatedBuilder(
                   animation: animation.controller,
                   builder: (context, child) {
@@ -245,8 +272,10 @@ final List<LocationMarker> _markerLocations = const [
                           color: Colors.grey.shade700,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.navigation_outlined,
-                            color: Colors.white),
+                        child: const Icon(
+                          Icons.navigation_outlined,
+                          color: Colors.white,
+                        ),
                       ),
                     );
                   },
@@ -254,6 +283,8 @@ final List<LocationMarker> _markerLocations = const [
               ],
             ),
           ),
+
+          if (_showLayerOptions) const AnimatedLayerBox(),
 
           // List of variants button
           Positioned(
@@ -295,8 +326,41 @@ final List<LocationMarker> _markerLocations = const [
       ),
     );
   }
-}
 
+  Widget _buildLayerOption({
+    required IconData icon,
+    required String label,
+    required Color color,
+  }) {
+    bool isSelected = _selectedLayer == label;
+
+    return GestureDetector(
+      onTap: () => _selectLayer(label),
+      child: Row(
+        children: [
+          Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: color, size: 18),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            label,
+            style: TextStyle(
+              color: isSelected ? Colors.orange : Colors.grey.shade600,
+              fontSize: 12,
+              fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 class LocationMarker {
   final LatLng latLong;
