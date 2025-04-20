@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 
 class AnimatedLayerBox extends StatefulWidget {
   final String selectedLayer;
-  final ValueChanged<String> onLayerSelected;
+  final Function(String label) onLayerSelected;
   final bool isVisible;
+  
+  // Optional: You can also pass the marker controller directly if you want
+  final AnimationController? markerController;
 
   const AnimatedLayerBox({
     super.key,
     required this.selectedLayer,
     required this.onLayerSelected,
     required this.isVisible,
+    this.markerController,
   });
 
   @override
@@ -31,15 +35,11 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
     );
 
     _widthAnimation = Tween<double>(begin: 0, end: 150).animate(
-      CurvedAnimation(parent: _controller, 
-      curve: Curves.easeInOut
-      ),
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
     _heightAnimation = Tween<double>(begin: 0, end: 160).animate(
-      CurvedAnimation(parent: _controller, 
-      curve: Curves.easeInOut
-      ),
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
     if (widget.isVisible) {
@@ -47,11 +47,14 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
     }
   }
 
+
+  
+
   @override
-  void didUpdateWidget(covariant AnimatedLayerBox oldWidget) async{
+  void didUpdateWidget(covariant AnimatedLayerBox oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.isVisible != oldWidget.isVisible) {
-      widget.isVisible ? _controller.forward() :  _controller.reverse();
+      widget.isVisible ? _controller.forward() : _controller.reverse();
     }
   }
 
@@ -61,12 +64,17 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
     super.dispose();
   }
 
-  Future<void> _handleLayerSelection(String label) async {
-      Future.delayed(Duration(milliseconds: 8000), ()  async{
-   
-  });
-   await _controller.reverse();
-        widget.onLayerSelected(label);
+  void _handleLayerSelection(String label) async {
+    // Start the reverse animation
+    await _controller.reverse();
+    //  widget.markerController!.reverse();
+    
+    // Pass both the selected label AND our animation controller
+    // This allows the parent to synchronize with our animation
+    widget.onLayerSelected(label);
+    
+    // If marker controller was passed, we can also start it directly
+    widget.markerController?.forward();
   }
 
   Widget _buildLayerOption({
@@ -79,18 +87,15 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(icon, color:  isSelected ? Colors.orange : Colors.grey.shade600, size: 15),
+        Icon(icon, color: isSelected ? Colors.orange : Colors.grey.shade600, size: 15),
         const SizedBox(width: 12),
         GestureDetector(
-                onTap: () {
-
-                _handleLayerSelection(label);},
+          onTap: () => _handleLayerSelection(label),
           child: Text(
             label,
             style: TextStyle(
               color: isSelected ? Colors.orange : Colors.grey.shade600,
               fontSize: 11,
-
               fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
             ),
           ),
@@ -102,7 +107,11 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _controller,
+      animation: Listenable.merge([
+                            _controller,
+                            widget.markerController
+                          ]),
+      // animation: _controller,
       builder: (context, child) {
         return Positioned(
           bottom: 190,
@@ -124,7 +133,7 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
             ),
             child: _widthAnimation.value > 140
                 ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       _buildLayerOption(
@@ -152,7 +161,7 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
                       ),
                     ],
                   )
-                : const SizedBox(),
+                : const SizedBox.shrink(),
           ),
         );
       },

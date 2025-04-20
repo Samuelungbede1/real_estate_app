@@ -120,7 +120,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                             } else {
                               // Default state
 
-                              width = animation.dialogClickMarkerWidth.value; // Or whatever your default width is
+                              width = animation.dialogClickMarkerWidth
+                                  .value; // Or whatever your default width is
                             }
 
                             return Align(
@@ -336,7 +337,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
           if (_showLayerOptions)
             AnimatedLayerBox(
+              markerController: animation.markerAnimationController,
               selectedLayer: _selectedLayer,
+              
               onLayerSelected: (layer) {
                 //Animate Marker Backwards here
                 //Animate Marker Backwards here
@@ -345,13 +348,14 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
                 // Run the marker shrink animation
                 // animation.markerController.reset();
- 
+                // animation.markerAnimationController.reset();
+             
+                animation.markerAnimationController.forward();
                 setState(() {
-                   animation.markerAnimationController.reverse();
-                  animation.markerAnimationController.forward();
                   _selectedLayer = layer;
                   _showLayerOptions = false;
                 });
+
                 // Add any additional logic here
               },
               // onClose: () {
