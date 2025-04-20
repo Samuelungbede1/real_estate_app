@@ -60,6 +60,8 @@ class _MapScreenState extends State<MapScreen>
       _selectedLayer = layer;
       // _showLayerOptions = false;
     });
+
+    
     // Here you would implement the logic to change the map layer
   }
 
@@ -122,7 +124,6 @@ class _MapScreenState extends State<MapScreen>
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    
                                     Flexible(
                                       child: FadeTransition(
                                         opacity: animation.fadeAnimation,
@@ -182,7 +183,7 @@ class _MapScreenState extends State<MapScreen>
                                   opacity: animation.searchBarWidth,
                                   child: const Text(
                                     'Saint Petersburg',
-                                    style:  TextStyle(
+                                    style: TextStyle(
                                       color: Colors.black87,
                                       fontSize: 16,
                                     ),
@@ -284,7 +285,23 @@ class _MapScreenState extends State<MapScreen>
             ),
           ),
 
-          if (_showLayerOptions) const AnimatedLayerBox(),
+          if (_showLayerOptions)
+            AnimatedLayerBox(
+              selectedLayer: _selectedLayer,
+              onLayerSelected: (layer) {
+                setState(() {
+                  _selectedLayer = layer;
+                  _showLayerOptions = false;
+                });
+                // Add any additional logic here
+              },
+              // onClose: () {
+              //   setState(() {
+              //     _showLayerOptions = false;
+              //   });
+              // },
+              isVisible: _showLayerOptions,
+            ),
 
           // List of variants button
           Positioned(
