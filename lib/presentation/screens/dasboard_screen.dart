@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:real_estate_app/core/utils/assets.dart';
 import 'package:real_estate_app/core/utils/dashboard_animation.dart';
 import 'package:real_estate_app/presentation/providers/property_provider.dart';
 import 'package:real_estate_app/presentation/widgets/address_indicator.dart';
@@ -40,10 +39,9 @@ class _DashboardScreenState extends State<DashboardScreen>
     final propertyProvider = context.watch<PropertyProvider>();
 
     return Scaffold(
-      backgroundColor: Colors.transparent, // Important
+      backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          // Gradient Background
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(

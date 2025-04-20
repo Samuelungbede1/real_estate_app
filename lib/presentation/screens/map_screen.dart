@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 import 'package:real_estate_app/core/utils/map_animation.dart';
 import 'package:real_estate_app/presentation/widgets/animated_layer_dialog.dart';
+
+import '../providers/property_provider.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -26,6 +29,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     // Ensure animation starts after build is complete
     WidgetsBinding.instance.addPostFrameCallback((_) {
       animation.controller.forward();
+      context.read<PropertyProvider>().fetchProperties();
     });
   }
 
@@ -35,16 +39,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  final List<LocationMarker> _markerLocations = const [
-    LocationMarker(latLong: LatLng(59.9343, 30.3351), label: "13,mnp"),
-    LocationMarker(latLong: LatLng(59.9398, 30.3006), label: "11 mnp"),
-    LocationMarker(latLong: LatLng(59.9339, 30.3061), label: "7,3 mnp"),
-    LocationMarker(latLong: LatLng(59.9339, 30.3171), label: "10,4 mnp"),
-    LocationMarker(latLong: LatLng(59.9350, 30.2958), label: "4,0 mnp"),
-    LocationMarker(latLong: LatLng(59.9250, 30.3171), label: "8 mnp"),
-    LocationMarker(latLong: LatLng(59.9309, 30.3010), label: "12,0 mnp"),
-    LocationMarker(latLong: LatLng(59.9340, 30.3308), label: "20,9 mnp"),
-  ];
 
   void _toggleLayerOptions() {
     animation.markerAnimationController.reverse();
@@ -66,6 +60,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final propertyProvider = context.watch<PropertyProvider>();
+
     return Scaffold(
       body: Stack(
         children: [
@@ -91,12 +87,12 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
               ),
               MarkerLayer(
                 rotate: true,
-                markers: _markerLocations
+                markers: propertyProvider.properties
                     .map(
                       (point) => Marker(
                         width: 60, // Fixed outer width
                         height: 35,
-                        point: point.latLong,
+                        point: LatLng(point.location.latitude, point.location.longitude),
                         child: AnimatedBuilder(
                           animation: Listenable.merge([
                             animation.controller,
@@ -175,7 +171,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                                     'business-icon'), // Important for AnimatedSwitcher
                                               )
                                             : Text(
-                                                point.label,
+                                                point.location.label,
                                                 style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 10),
@@ -339,7 +335,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
             AnimatedLayerBox(
               markerController: animation.markerAnimationController,
               selectedLayer: _selectedLayer,
-              
+
               onLayerSelected: (layer) {
                 //Animate Marker Backwards here
                 //Animate Marker Backwards here
@@ -349,7 +345,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 // Run the marker shrink animation
                 // animation.markerController.reset();
                 // animation.markerAnimationController.reset();
-             
+
                 animation.markerAnimationController.forward();
                 setState(() {
                   _selectedLayer = layer;
@@ -442,9 +438,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   }
 }
 
-class LocationMarker {
-  final LatLng latLong;
-  final String label;
+// class LocationMarker {
+//   final LatLng latLong;
+//   final String label;
 
-  const LocationMarker({required this.latLong, required this.label});
-}
+//   const LocationMarker({required this.latLong, required this.label});
+// }
