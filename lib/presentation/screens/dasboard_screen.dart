@@ -69,7 +69,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                       ExpandingLocationWidget(
                         location: 'Saint Petersburg',
                         animations:
-                            animations, // Your DashboardAnimations instance
+                            animations,
                       ),
                       const SizedBox(width: 8),
                       ExpandingProfileIcon(animations: animations),
@@ -253,15 +253,11 @@ class _DashboardScreenState extends State<DashboardScreen>
                                     ),
                                   ),
                                 ),
-
                               const SizedBox(height: 8),
-
-                              // Secondary properties row
                               if (propertyProvider.properties.length > 1)
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // Left property
                                     Expanded(
                                       flex: 1,
                                       child: ClipRRect(
@@ -301,10 +297,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                         ),
                                       ),
                                     ),
-
                                     const SizedBox(width: 8),
-
-                                    // Right properties column
                                     if (propertyProvider.properties.length > 2)
                                       Expanded(
                                         flex: 1,
@@ -410,11 +403,11 @@ class _DashboardScreenState extends State<DashboardScreen>
   static Widget _offerCardRound(String label, String count, Color bgColor,
       {bool darkText = false}) {
     return Container(
-      width: 180, // Set width and height to the same value
+      width: 180,
       height: 180,
       decoration: BoxDecoration(
         color: Colors.orange,
-        borderRadius: BorderRadius.circular(100), // Makes it circular
+        borderRadius: BorderRadius.circular(100),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -435,7 +428,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                   color: darkText ? Colors.black87 : Colors.white,
                 ),
               ),
-              // const SizedBox(height: 4),
               const Text(
                 "offers",
                 style: TextStyle(
@@ -498,7 +490,6 @@ class _DashboardScreenState extends State<DashboardScreen>
     );
   }
 
-  //Animations
   Widget _buildAnimatedLocation(DashboardAnimations animations) {
     return SlideTransition(
       position: Tween<Offset>(

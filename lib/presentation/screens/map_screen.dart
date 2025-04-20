@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:real_estate_app/core/utils/map_animation.dart';
+import 'package:real_estate_app/core/utils/string_constants.dart';
 import 'package:real_estate_app/presentation/widgets/animated_layer_dialog.dart';
 
 import '../providers/property_provider.dart';
@@ -24,9 +25,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    animation = MapAnimation(this); // 'this' is the TickerProvider
+    animation = MapAnimation(this);
 
-    // Ensure animation starts after build is complete
     WidgetsBinding.instance.addPostFrameCallback((_) {
       animation.controller.forward();
       context.read<PropertyProvider>().fetchProperties();
@@ -38,7 +38,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     animation.dispose();
     super.dispose();
   }
-
 
   void _toggleLayerOptions() {
     animation.markerAnimationController.reverse();
@@ -54,8 +53,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       _selectedLayer = layer;
       // _showLayerOptions = false;
     });
-
-    // Here you would implement the logic to change the map layer
   }
 
   @override
@@ -65,12 +62,12 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     return Scaffold(
       body: Stack(
         children: [
-          // Map
           FlutterMap(
             mapController: _mapController,
-            options: const MapOptions(
-              initialCenter:
-                  LatLng(59.9339, 30.3061), // Saint Petersburg coordinates
+            options: MapOptions(
+              initialCenter: LatLng(
+                  propertyProvider.properties[1].location.latitude,
+                  propertyProvider.properties[1].location.longitude),
               initialZoom: 14.0,
               minZoom: 14.0,
               maxZoom: 28.0,
@@ -80,9 +77,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
               TileLayer(
                 maxZoom: double.infinity,
                 retinaMode: true,
-                urlTemplate:
-                    'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-                subdomains: const ['a', 'b', 'c', 'd'],
+                urlTemplate: StringConstants.mapUrlTemplate,
+                subdomains: StringConstants.subdomains,
                 userAgentPackageName: 'com.example.app',
               ),
               MarkerLayer(
@@ -90,42 +86,35 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 markers: propertyProvider.properties
                     .map(
                       (point) => Marker(
-                        width: 60, // Fixed outer width
+                        width: 60,
                         height: 35,
-                        point: LatLng(point.location.latitude, point.location.longitude),
+                        point: LatLng(
+                            point.location.latitude, point.location.longitude),
                         child: AnimatedBuilder(
                           animation: Listenable.merge([
                             animation.controller,
                             animation.markerAnimationController
-                          ]), // Listen to both controllers
+                          ]),
                           builder: (context, child) {
-                            // Determine which width to use based on animation state
                             double width;
-
                             if (animation.controller.status ==
                                 AnimationStatus.forward) {
-                              // Initial load animation
                               width = animation.markerWidth.value;
                             } else if (animation
                                         .markerAnimationController.status ==
                                     AnimationStatus.forward ||
                                 animation.markerAnimationController.status ==
                                     AnimationStatus.completed) {
-                              // Dialog click animation
                               width = animation.dialogClickMarkerWidth.value;
                             } else {
-                              // Default state
-
-                              width = animation.dialogClickMarkerWidth
-                                  .value; // Or whatever your default width is
+                              width = animation.dialogClickMarkerWidth.value;
                             }
 
                             return Align(
                               alignment: Alignment.centerLeft,
                               child: Container(
-                                width: width, // Use the calculated width
-                                height: animation.markerHeight
-                                    .value, // Height only animates on initial load
+                                width: width,
+                                height: animation.markerHeight.value,
                                 padding: const EdgeInsets.all(4),
                                 decoration: const BoxDecoration(
                                   color: Colors.orange,
@@ -140,7 +129,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    // Inside your marker's AnimatedBuilder
                                     Flexible(
                                       child: AnimatedSwitcher(
                                         duration:
@@ -167,8 +155,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                                 size: 14,
                                                 Icons.business,
                                                 color: Colors.white,
-                                                key: ValueKey(
-                                                    'business-icon'), // Important for AnimatedSwitcher
+                                                key: ValueKey('business-icon'),
                                               )
                                             : Text(
                                                 point.location.label,
@@ -177,7 +164,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                                     fontSize: 10),
                                                 overflow: TextOverflow.ellipsis,
                                                 key: const ValueKey(
-                                                    'label-text'), // Important for AnimatedSwitcher
+                                                    'label-text'),
                                               ),
                                       ),
                                     )
@@ -191,11 +178,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     )
                     .toList(),
               ),
-//               ),
             ],
           ),
-
-          // Search bar and other UI elements remain the same
           Positioned(
             top: MediaQuery.of(context).padding.top + 10,
             left: 16,
@@ -269,14 +253,11 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
               ],
             ),
           ),
-
-          // Bottom controls
           Positioned(
             bottom: 140,
             left: 16,
             child: Column(
               children: [
-                // Layer button - Fixed version
                 GestureDetector(
                   onTap: () {
                     print('TAPPED - Layer Button');
@@ -335,34 +316,16 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
             AnimatedLayerBox(
               markerController: animation.markerAnimationController,
               selectedLayer: _selectedLayer,
-
               onLayerSelected: (layer) {
-                //Animate Marker Backwards here
-                //Animate Marker Backwards here
-                //Animate Marker Backwards here
-                // animation.controller.reverse();
-
-                // Run the marker shrink animation
-                // animation.markerController.reset();
-                // animation.markerAnimationController.reset();
-
-                animation.markerAnimationController.forward();
+             animation.markerAnimationController.forward();
                 setState(() {
                   _selectedLayer = layer;
                   _showLayerOptions = false;
                 });
-
-                // Add any additional logic here
               },
-              // onClose: () {
-              //   setState(() {
-              //     _showLayerOptions = false;
-              //   });
-              // },
               isVisible: _showLayerOptions,
             ),
 
-          // List of variants button
           Positioned(
             bottom: 140,
             right: 16,
@@ -438,9 +401,3 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   }
 }
 
-// class LocationMarker {
-//   final LatLng latLong;
-//   final String label;
-
-//   const LocationMarker({required this.latLong, required this.label});
-// }

@@ -5,13 +5,10 @@ import 'package:flutter/material.dart';
 class SizeConfig {
   SizeConfig();
 
-  // App was developed on an a Tab Emulator with dimension (w:h) of 1024:1366
-  // ? this should be replaced with the design dim.
-
   static Size designSize = const Size(390, 844);
   static late Size deviceSize;
 
-  // This is called once
+
   static void setSize(MediaQueryData media) {
     deviceSize = Size(media.size.width, media.size.height);
   }

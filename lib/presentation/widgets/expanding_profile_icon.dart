@@ -20,18 +20,12 @@ class ExpandingProfileIcon extends StatelessWidget {
             .animate(CurvedAnimation(
               parent: animations.controller,
               curve: const Interval(
-                0.0, // Start at 30% of the animation duration
+                0.0,
                 0.20,
                 curve: Curves.easeIn,
               ),
             ))
             .value;
-
-        // final scale = CurvedAnimation(
-        //   parent: animations.controller,
-        //   curve: Curves.linearToEaseOut, // Makes it feel more "bouncy"
-        // ).value;
-
         return Transform.scale(
           scale: scale, // This gives the pinch zoom effect
           alignment: Alignment.center,

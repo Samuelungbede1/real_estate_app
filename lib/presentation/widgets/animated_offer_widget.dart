@@ -15,7 +15,7 @@ class AnimatedOfferCircle extends StatelessWidget {
       CurvedAnimation(
         parent: animations.controller,
         curve: const Interval(
-          0.25, // slightly after the scale animation begins
+          0.25,
           0.55,
           curve: Curves.linearToEaseOut,
         ),

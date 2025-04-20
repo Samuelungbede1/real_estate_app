@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:real_estate_app/core/utils/dashboard_animation.dart';
-import 'dart:math' as math;
 
 class AnimatedAddressIndicator extends StatefulWidget {
   final String address;
@@ -45,19 +44,8 @@ void initState() {
     );
   } else {
     _animation = const AlwaysStoppedAnimation<double>(1.0);
-    print("Warning: DashboardAnimations not provided to AnimatedAddressIndicator.");
   }
 }
-
-
-  // void startAnimation() {
-  //   if (widget.animations != null) {
-  //     widget.animations!.controller.reset();
-  //     widget.animations!.controller.forward();
-  //   } else {
-  //     print("Warning: Cannot start animation, DashboardAnimations not provided.");
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

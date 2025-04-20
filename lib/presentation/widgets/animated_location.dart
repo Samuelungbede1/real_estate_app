@@ -47,26 +47,20 @@ class _ExpandingLocationWidgetState extends State<ExpandingLocationWidget>
               width: currentWidth,
               padding: EdgeInsets.only(
                 left: 16,
-                right: 16 * expandProgress, // Make sure padding scales with width
+                right: 16 * expandProgress,
               ),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  // BoxShadow(
-                  //   color: Colors.grey.withOpacity(0.1 * expandProgress),
-                  //   blurRadius: 10 * expandProgress,
-                  // ),
-                ],
               ),
               child: ClipRect(
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    // Only show content when there's enough space
+                  
                     final showContent = contentVisibility > 0 && constraints.maxWidth > 30;
                     
                     return Row(
-                      mainAxisSize: MainAxisSize.min, // Important: Use minimum space
+                      mainAxisSize: MainAxisSize.min, 
                       children: [
                         if (showContent) 
                           AnimatedOpacity(
@@ -92,7 +86,7 @@ class _ExpandingLocationWidgetState extends State<ExpandingLocationWidget>
                                   color: Colors.brown,
                                   fontSize: 12,
                                 ),
-                                overflow: TextOverflow.ellipsis, // Add this to prevent text overflow
+                                overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
                             ),

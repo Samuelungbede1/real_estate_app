@@ -26,8 +26,6 @@ class AnimatedRentWidget extends StatelessWidget {
               ),
             )
             .value;
-
-        // Number animation (0 to 2212)
         final numberAnimation = IntTween(begin: 0, end: 2212)
             .animate(
               CurvedAnimation(
@@ -64,7 +62,7 @@ class AnimatedRentWidget extends StatelessWidget {
                     Column(
                       children: [
                         Text(
-                          numberAnimation.toString(), // Animated number
+                          numberAnimation.toString(),
                           style: const TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,

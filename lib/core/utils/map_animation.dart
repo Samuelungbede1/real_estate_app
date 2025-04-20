@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 class MapAnimation {
   late final AnimationController controller;
   late final AnimationController
-      markerAnimationController; // Separate controller for markers
+      markerAnimationController;
 
   late final Animation<double> fadeAnimation;
   late final Animation<double> slideAnimation;
@@ -19,10 +19,7 @@ class MapAnimation {
   late final Animation<double> markerWidth;
   late final Animation<double> markerHeight;
   late final Animation<double> markerScale;
-  // late final Animation<double> dialogWidthAnimation;
-  // late final Animation<double>  dialogHeightAnimation;
 
-  // Add these for marker animations
   late final Animation<double> reMarkerWidth;
   late final Animation<double> reMarkerHeight;
   late final Animation<double> reMarkerScale;
@@ -35,7 +32,7 @@ class MapAnimation {
       duration: const Duration(milliseconds: 5000),
     );
 
-    // Separate controller just for marker animations
+
     markerAnimationController = AnimationController(
       vsync: vsync,
       duration: const Duration(milliseconds: 850),
@@ -48,7 +45,6 @@ class MapAnimation {
       ),
     );
 
-    // Search bar scales from 0 to 1 between 0.1 and 0.3
     searchBarScale = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: controller,
@@ -56,7 +52,6 @@ class MapAnimation {
       ),
     );
 
-    // Filter icon scales from 0 to 1 a little after
     filterIconScale = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: controller,
@@ -92,7 +87,6 @@ class MapAnimation {
       ),
     );
 
-    // Marker animations
     reMarkerWidth = Tween<double>(begin: 0, end: 60).animate(
       CurvedAnimation(
         parent: controller,
@@ -112,9 +106,6 @@ class MapAnimation {
       ),
     );
 
-// Add this to your MapAnimation class
-
-// Dialog click animation - ONLY affects width
     dialogClickMarkerWidth = Tween<double>(begin: 60, end: 30).animate(
       CurvedAnimation(
         parent: markerAnimationController,

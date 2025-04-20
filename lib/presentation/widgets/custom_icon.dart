@@ -48,7 +48,6 @@ class CustomIcon extends StatelessWidget {
             height: SizeConfig.propHeight(height ?? size),
             width: SizeConfig.propWidth(width ?? size),
             color: color,
-            // theme: SvgTheme(currentColor: color),
             placeholderBuilder: (context) => const Icon(Icons.error_outline),
           );
         }));

@@ -4,9 +4,7 @@ class AnimatedLayerBox extends StatefulWidget {
   final String selectedLayer;
   final Function(String label) onLayerSelected;
   final bool isVisible;
-  
-  // Optional: You can also pass the marker controller directly if you want
-  final AnimationController? markerController;
+    final AnimationController? markerController;
 
   const AnimatedLayerBox({
     super.key,
@@ -65,7 +63,6 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
   }
 
   void _handleLayerSelection(String label) async {
-    // Start the reverse animation
     await _controller.reverse();
     //  widget.markerController!.reverse();
     

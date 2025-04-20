@@ -6,8 +6,7 @@ const MockupWidth = 390.0;
 
 sHeight(BuildContext context) {
   return (dynamic height) {
-    // double screenHeight = MediaQuery.of(context).size.height *
-    //     MediaQuery.of(context).devicePixelRatio;
+  
     double screenHeight = MediaQuery.of(context).size.height;
     double result = screenHeight * (height / MockupHeight);
     return result.sp;

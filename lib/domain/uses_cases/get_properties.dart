@@ -8,7 +8,7 @@ class GetProperties {
   GetProperties(this.repository);
 
   Future<List<Property>> call() async {
- print('Hey you');
+ print('LOGED!!! Hey you');
     return await repository.getProperties();
   }
 }
