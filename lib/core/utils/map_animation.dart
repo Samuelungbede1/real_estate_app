@@ -2,8 +2,8 @@ import 'package:flutter/widgets.dart';
 
 class MapAnimation {
   late final AnimationController controller;
-  late final AnimationController markerController; // Separate controller for markers
-
+  late final AnimationController
+      markerAnimationController; // Separate controller for markers
 
   late final Animation<double> fadeAnimation;
   late final Animation<double> slideAnimation;
@@ -27,7 +27,6 @@ class MapAnimation {
   late final Animation<double> reMarkerHeight;
   late final Animation<double> reMarkerScale;
 
-
   late final Animation<double> dialogClickMarkerWidth;
 
   MapAnimation(TickerProvider vsync) {
@@ -36,9 +35,8 @@ class MapAnimation {
       duration: const Duration(milliseconds: 5000),
     );
 
-
     // Separate controller just for marker animations
-    markerController = AnimationController(
+    markerAnimationController = AnimationController(
       vsync: vsync,
       duration: const Duration(milliseconds: 850),
     );
@@ -93,13 +91,12 @@ class MapAnimation {
         curve: Curves.easeInOut,
       ),
     );
-   
 
     // Marker animations
     reMarkerWidth = Tween<double>(begin: 0, end: 60).animate(
       CurvedAnimation(
         parent: controller,
-     curve: const Interval(0.1, 0.9, curve: Curves.decelerate),
+        curve: const Interval(0.1, 0.9, curve: Curves.decelerate),
       ),
     );
     reMarkerHeight = Tween<double>(begin: 35, end: 45).animate(
@@ -115,20 +112,15 @@ class MapAnimation {
       ),
     );
 
-
-
 // Add this to your MapAnimation class
 
-
-
 // Dialog click animation - ONLY affects width
-  dialogClickMarkerWidth = Tween<double>(begin: 60, end: 30).animate(
-    CurvedAnimation(
-      parent: markerController,
-      curve: const Interval(0.0, 1.0, curve: Curves.easeInOut)
-      ,
-    ),
-  );
+    dialogClickMarkerWidth = Tween<double>(begin: 60, end: 30).animate(
+      CurvedAnimation(
+        parent: markerAnimationController,
+        curve: const Interval(0.0, 0.8, curve: Curves.easeInOut),
+      ),
+    );
     controller.forward();
   }
 

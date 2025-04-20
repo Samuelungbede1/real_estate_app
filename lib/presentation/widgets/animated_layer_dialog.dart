@@ -48,10 +48,10 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
   }
 
   @override
-  void didUpdateWidget(covariant AnimatedLayerBox oldWidget) {
+  void didUpdateWidget(covariant AnimatedLayerBox oldWidget) async{
     super.didUpdateWidget(oldWidget);
     if (widget.isVisible != oldWidget.isVisible) {
-      widget.isVisible ? _controller.forward() : _controller.reverse();
+      widget.isVisible ? _controller.forward() :  _controller.reverse();
     }
   }
 
@@ -62,7 +62,10 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
   }
 
   Future<void> _handleLayerSelection(String label) async {
-    await _controller.reverse();
+      Future.delayed(Duration(milliseconds: 8000), ()  async{
+   
+  });
+   await _controller.reverse();
         widget.onLayerSelected(label);
   }
 
@@ -79,7 +82,9 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
         Icon(icon, color:  isSelected ? Colors.orange : Colors.grey.shade600, size: 15),
         const SizedBox(width: 12),
         GestureDetector(
-                onTap: () => _handleLayerSelection(label),
+                onTap: () {
+
+                _handleLayerSelection(label);},
           child: Text(
             label,
             style: TextStyle(
@@ -147,7 +152,7 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
                       ),
                     ],
                   )
-                : const SizedBox.shrink(),
+                : const SizedBox(),
           ),
         );
       },
