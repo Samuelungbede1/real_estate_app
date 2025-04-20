@@ -7,7 +7,8 @@ import 'local_property_data_ource.dart';
 class LocalPropertySourceImpl implements LocalPropertySource {
   @override
   Future<List<PropertyModel>> getProperties() async {
-    await Future.delayed(const Duration(milliseconds: 200));
+    // await Future.delayed(const Duration(milliseconds: 200));
+     print('-----1');
     return mockProperties.map((json) => PropertyModel.fromJson(json)).toList();
   }
 }

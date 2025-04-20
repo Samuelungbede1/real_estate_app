@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:real_estate_app/core/utils/assets.dart';
 import 'package:real_estate_app/core/utils/dashboard_animation.dart';
+import 'package:real_estate_app/presentation/providers/property_provider.dart';
 import 'package:real_estate_app/presentation/widgets/address_indicator.dart';
 import 'package:real_estate_app/presentation/widgets/animated_location.dart';
 import 'package:real_estate_app/presentation/widgets/animated_offer_widget.dart';
 import 'package:real_estate_app/presentation/widgets/animated_rent_widget.dart';
-import 'package:real_estate_app/presentation/widgets/custom_icon.dart';
 import 'package:real_estate_app/presentation/widgets/expanding_profile_icon.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -22,7 +23,10 @@ class _DashboardScreenState extends State<DashboardScreen>
   @override
   void initState() {
     super.initState();
-    animations = DashboardAnimations(this); // 'this' is the TickerProvider
+    animations = DashboardAnimations(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<PropertyProvider>().fetchProperties();
+    });
   }
 
   @override
@@ -33,6 +37,8 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   @override
   Widget build(BuildContext context) {
+    final propertyProvider = context.watch<PropertyProvider>();
+
     return Scaffold(
       backgroundColor: Colors.transparent, // Important
       body: Stack(
@@ -72,8 +78,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                     ],
                   ),
                   const SizedBox(height: 20),
-
-                  // Greeting
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -81,8 +85,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                         opacity: CurvedAnimation(
                           parent: animations.controller,
                           curve: const Interval(
-                            0.15, // delay start (65% into the main animation timeline)
-                            .25, // ends at 60%
+                            0.15,
+                            .25,
                             curve: Curves.easeIn,
                           ),
                         ),
@@ -96,28 +100,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                           maxLines: 1,
                         ),
                       ),
-                      // // ⬇️ Add this for animated reveal
-                      // AnimatedBuilder(
-                      //   animation: animations.controller,
-                      //   builder: (context, child) {
-                      //     return ClipRect(
-                      //       child: Align(
-                      //         alignment: Alignment.topLeft,
-                      //         heightFactor: animations.revealAnimation
-                      //             .value, // Use the revealAnimation here!
-                      //         child: const Text(
-                      //           "Let's select your \nperfect place",
-                      //           style: const TextStyle(
-                      //             fontSize: 28,
-                      //             fontWeight: FontWeight.bold,
-                      //             color: Colors.black87,
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     );
-                      //   },
-                      // )
-
                       ClipRect(
                         child: Align(
                           alignment: Alignment.topLeft,
@@ -137,15 +119,11 @@ class _DashboardScreenState extends State<DashboardScreen>
                       )
                     ],
                   ),
-
                   const SizedBox(height: 20),
                   Row(
                     children: [
-                      // Assuming you have initialized your DashboardAnimations instance as 'animations'
-
                       AnimatedOfferCircle(animations: animations),
-
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       AnimatedRentWidget(animations: animations)
@@ -157,7 +135,6 @@ class _DashboardScreenState extends State<DashboardScreen>
             ),
           ),
 
-          // Floating White Foreground Sheet
           Align(
             alignment: Alignment.bottomCenter,
             child: AnimatedBuilder(
@@ -169,6 +146,64 @@ class _DashboardScreenState extends State<DashboardScreen>
                   maxChildSize: 0.68,
                   builder: (BuildContext context,
                       ScrollController scrollController) {
+                    if (propertyProvider.isLoading) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(32),
+                            topRight: Radius.circular(32),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 10,
+                            )
+                          ],
+                        ),
+                        child: const Center(child: CircularProgressIndicator()),
+                      );
+                    }
+
+                    if (propertyProvider.hasError) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(32),
+                            topRight: Radius.circular(32),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 10,
+                            )
+                          ],
+                        ),
+                        child: Center(
+                            child: Text('Error: ${propertyProvider.error}')),
+                      );
+                    }
+
+                    if (propertyProvider.properties.isEmpty) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(32),
+                            topRight: Radius.circular(32),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 10,
+                            )
+                          ],
+                        ),
+                        child: const Center(
+                            child: Text('No properties available')),
+                      );
+                    }
                     return Container(
                       padding: const EdgeInsets.all(8),
                       decoration: const BoxDecoration(
@@ -177,11 +212,10 @@ class _DashboardScreenState extends State<DashboardScreen>
                           topLeft: Radius.circular(32),
                           topRight: Radius.circular(32),
                         ),
-                        boxShadow: const [
+                        boxShadow: [
                           BoxShadow(
                             color: Colors.black12,
                             blurRadius: 10,
-                            // offset: Offset(0, -2),
                           )
                         ],
                       ),
@@ -190,195 +224,178 @@ class _DashboardScreenState extends State<DashboardScreen>
                         padding: EdgeInsets.zero,
                         controller: scrollController,
                         children: [
-                          // Staggered grid with colored containers
-
                           Column(
                             children: [
-// Top full-width container
-
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(24),
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                          'assets/icons/study.png'), // Replace with your image path
-
-                                      fit: BoxFit
-                                          .cover, // Adjust how the image should fit
-                                    ),
-                                  ),
-                                  height: 190,
-                                  width: double.infinity,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      AnimatedAddressIndicator(
-                                        interval: const Interval(0.55, 0.70,
-                                            curve: Curves.easeInToLinear),
-                                        animations: animations,
-                                        address: "Gladkova St., 25",
-                                        onTap: () {
-// Handle tap event
-
-                                          print("Address indicator tapped");
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                    ],
-                                  ),
-                                ),
-                              ),
-
-                              const SizedBox(height: 8),
-
-// Bottom row with vertical container on left and two stacked containers on right
-
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-// Left vertical container
-
-                                  Expanded(
-                                    flex: 1,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(24),
-                                      child: Container(
-                                        decoration: const BoxDecoration(
-                                          image: DecorationImage(
-                                            image: AssetImage(
-                                                'assets/icons/hall_way.png'), // Replace with your image path
-
-                                            fit: BoxFit
-                                                .cover, // Adjust how the image should fit
-                                          ),
-                                        ),
-                                        height: 320,
-                                        width: double.infinity,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            AnimatedAddressIndicator(
-                                              interval: const Interval(
-                                                 0.70, 0.80,
-                                                  curve: Curves.easeInToLinear),
-                                              animations: animations,
-                                              address: "2 Gladkova St., 25",
-                                              onTap: () {
-// Handle tap event
-
-                                                print(
-                                                    "Address indicator tapped");
-                                              },
-                                            ),
-                                            const SizedBox(height: 10),
-                                          ],
-                                        ),
+                              if (propertyProvider.properties.isNotEmpty)
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(24),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(propertyProvider
+                                            .properties[0].images),
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                                  ),
-
-                                  const SizedBox(width: 8),
-
-// Right column with two stacked containers
-
-                                  Expanded(
-                                    flex: 1,
+                                    height: 190,
+                                    width: double.infinity,
                                     child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-// Top right container
-
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(24),
-                                          child: Container(
-                                            decoration: const BoxDecoration(
-                                              image: DecorationImage(
-                                                image: AssetImage(
-                                                    'assets/icons/sofa.png'), // Replace with your image path
-
-                                                fit: BoxFit
-                                                    .cover, // Adjust how the image should fit
-                                              ),
-                                            ),
-                                            height: 156,
-                                            width: double.infinity,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                AnimatedAddressIndicator(
-                                                  interval: const Interval(
-                                                      0.65, 0.75,
-                                                      curve: Curves
-                                                          .easeInToLinear),
-                                                  animations: animations,
-                                                  address: "3 Gladkova St., 25",
-                                                  onTap: () {
-// Handle tap event
-
-                                                    print(
-                                                        "Address indicator tapped");
-                                                  },
-                                                ),
-                                                const SizedBox(height: 10),
-                                              ],
-                                            ),
-                                          ),
+                                        AnimatedAddressIndicator(
+                                          interval: const Interval(0.55, 0.70,
+                                              curve: Curves.easeInToLinear),
+                                          animations: animations,
+                                          address: propertyProvider
+                                              .properties[0].location.address,
+                                          onTap: () {},
                                         ),
-
-                                        const SizedBox(height: 8),
-
-// Bottom right container
-
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(24),
-                                          child: Container(
-                                            decoration: const BoxDecoration(
-                                              image: DecorationImage(
-                                                image: AssetImage(
-                                                  'assets/icons/large_room.png'
-                                                    ), // Replace with your image path
-
-                                                fit: BoxFit
-                                                    .cover, // Adjust how the image should fit
-                                              ),
-                                            ),
-                                            height: 156,
-                                            width: double.infinity,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                AnimatedAddressIndicator(
-                                                  interval: const Interval(
-                                                        0.70, 0.80,
-                                                      curve: Curves
-                                                          .easeInToLinear),
-                                                  animations: animations,
-                                                  address: "4 Gladkova St., 25",
-                                                  onTap: () {
-// Handle tap event
-
-                                                    print(
-                                                        "Address indicator tapped");
-                                                  },
-                                                ),
-                                                const SizedBox(height: 10),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
+                                        const SizedBox(height: 10),
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+
+                              const SizedBox(height: 8),
+
+                              // Secondary properties row
+                              if (propertyProvider.properties.length > 1)
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Left property
+                                    Expanded(
+                                      flex: 1,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(24),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: AssetImage(propertyProvider
+                                                  .properties[1].images),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          height: 320,
+                                          width: double.infinity,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              if (propertyProvider
+                                                      .properties.length >
+                                                  1)
+                                                AnimatedAddressIndicator(
+                                                  interval: const Interval(
+                                                      0.70, 0.80,
+                                                      curve: Curves
+                                                          .easeInToLinear),
+                                                  animations: animations,
+                                                  address: propertyProvider
+                                                      .properties[1]
+                                                      .location
+                                                      .address,
+                                                  onTap: () {},
+                                                ),
+                                              const SizedBox(height: 10),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    const SizedBox(width: 8),
+
+                                    // Right properties column
+                                    if (propertyProvider.properties.length > 2)
+                                      Expanded(
+                                        flex: 1,
+                                        child: Column(
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image: AssetImage(
+                                                        propertyProvider
+                                                            .properties[2]
+                                                            .images),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                                height: 156,
+                                                width: double.infinity,
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    AnimatedAddressIndicator(
+                                                      interval: const Interval(
+                                                          0.65, 0.75,
+                                                          curve: Curves
+                                                              .easeInToLinear),
+                                                      animations: animations,
+                                                      address: propertyProvider
+                                                          .properties[2]
+                                                          .location
+                                                          .address,
+                                                      onTap: () {},
+                                                    ),
+                                                    const SizedBox(height: 10),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image: AssetImage(
+                                                        propertyProvider
+                                                            .properties[3]
+                                                            .images),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                                height: 156,
+                                                width: double.infinity,
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    if (propertyProvider
+                                                            .properties.length >
+                                                        3)
+                                                      AnimatedAddressIndicator(
+                                                        interval: const Interval(
+                                                            0.70, 0.80,
+                                                            curve: Curves
+                                                                .easeInToLinear),
+                                                        animations: animations,
+                                                        address:
+                                                            propertyProvider
+                                                                .properties[3]
+                                                                .location
+                                                                .address,
+                                                        onTap: () {},
+                                                      ),
+                                                    const SizedBox(height: 10),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                  ],
+                                ),
                             ],
                           ),
-                          // Your existing content here...
                         ],
                       ),
                     );
@@ -387,36 +404,6 @@ class _DashboardScreenState extends State<DashboardScreen>
               },
             ),
           ),
-
-// AnimatedBuilder(
-//   animation: animations.controller,
-//   builder: (context, child) {
-//     return Positioned(
-//       bottom: animations.bottomNavPosition.value,
-//       left: 80,
-//       right: 80,
-//       child: child!,
-//     );
-//   },
-//   child: Container(
-//     height: 55,
-//     decoration: BoxDecoration(
-//       color: Colors.black.withOpacity(0.9),
-//       borderRadius: BorderRadius.circular(30),
-//     ),
-//     child: Row(
-//       mainAxisAlignment: MainAxisAlignment.spaceAround,
-//       children: [
-//         _buildNavItem(0, Icons.search_rounded, true),
-//         _buildNavItem(1, Icons.messenger_outlined, false),
-//         _buildNavItem(2, Icons.home_filled, false),
-//         _buildNavItem(3, Icons.favorite, false),
-//         _buildNavItem(4, Icons.person_2_sharp, false),
-//       ],
-//     ),
-//   ),
-// )
-
         ],
       ),
     );
@@ -512,8 +499,6 @@ class _DashboardScreenState extends State<DashboardScreen>
       ),
     );
   }
-
-
 
   //Animations
   Widget _buildAnimatedLocation(DashboardAnimations animations) {

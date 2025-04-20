@@ -18,6 +18,7 @@ class PropertyProvider with ChangeNotifier {
   bool get hasError => _error.isNotEmpty;
 
   Future<void> fetchProperties() async {
+    print('HEHEHEHEHEHE');
     _isLoading = true;
     notifyListeners();
 
@@ -32,5 +33,4 @@ class PropertyProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
 }

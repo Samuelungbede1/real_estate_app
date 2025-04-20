@@ -7,7 +7,7 @@ class Property {
   final int bedrooms;
   final int bathrooms;
   final double area;
-  final List<String> images;
+  final String images;
   final Location location;
   final bool isFavorite;
   final DateTime postedDate;
@@ -34,7 +34,7 @@ class Property {
     int? bedrooms,
     int? bathrooms,
     double? area,
-    List<String>? images,
+    String? images,
     Location? location,
     bool? isFavorite,
     DateTime? postedDate,

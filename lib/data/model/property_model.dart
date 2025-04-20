@@ -9,7 +9,7 @@ class PropertyModel extends Property {
     required int bedrooms,
     required int bathrooms,
     required double area,
-    required List<String> images,
+    required String images,
     required Location location,
     required bool isFavorite,
     required DateTime postedDate,
@@ -36,7 +36,7 @@ class PropertyModel extends Property {
       bedrooms: json['bedrooms'],
       bathrooms: json['bathrooms'],
       area: json['area'].toDouble(),
-      images: List<String>.from(json['images']),
+      images: json['images'],
       location: Location(
         latitude: json['location']['latitude'].toDouble(),
         longitude: json['location']['longitude'].toDouble(),
