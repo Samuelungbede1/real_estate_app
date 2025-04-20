@@ -2,6 +2,9 @@ import 'package:flutter/widgets.dart';
 
 class MapAnimation {
   late final AnimationController controller;
+  late final AnimationController markerController; // Separate controller for markers
+
+
   late final Animation<double> fadeAnimation;
   late final Animation<double> slideAnimation;
 
@@ -13,16 +16,31 @@ class MapAnimation {
   late final Animation<double> searchBarScale;
   late final Animation<double> filterIconScale;
   late final Animation<double> searchBarWidth;
-  late final Animation<double> widthAnimation;
-  late final Animation<double> heightAnimation;
-
+  late final Animation<double> markerWidth;
+  late final Animation<double> markerHeight;
+  late final Animation<double> markerScale;
   // late final Animation<double> dialogWidthAnimation;
   // late final Animation<double>  dialogHeightAnimation;
+
+  // Add these for marker animations
+  late final Animation<double> reMarkerWidth;
+  late final Animation<double> reMarkerHeight;
+  late final Animation<double> reMarkerScale;
+
+
+  late final Animation<double> dialogClickMarkerWidth;
 
   MapAnimation(TickerProvider vsync) {
     controller = AnimationController(
       vsync: vsync,
       duration: const Duration(milliseconds: 5000),
+    );
+
+
+    // Separate controller just for marker animations
+    markerController = AnimationController(
+      vsync: vsync,
+      duration: const Duration(milliseconds: 850),
     );
 
     fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
@@ -55,30 +73,62 @@ class MapAnimation {
       ),
     );
 
-    widthAnimation = Tween<double>(begin: 0, end: 60).animate(
-      CurvedAnimation(parent: controller, 
-        curve: const Interval(0.35, 0.5, curve: Curves.easeIn),
-      ),
-    );
-
-      heightAnimation = Tween<double>(begin: 0, end: 35).animate(
+    markerWidth = Tween<double>(begin: 0, end: 60).animate(
       CurvedAnimation(
         parent: controller,
         curve: const Interval(0.35, 0.5, curve: Curves.easeIn),
       ),
     );
 
+    markerHeight = Tween<double>(begin: 0, end: 35).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: const Interval(0.35, 0.5, curve: Curves.easeIn),
+      ),
+    );
+
+    markerScale = Tween<double>(begin: 1.0, end: 1.2).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Curves.easeInOut,
+      ),
+    );
+   
+
+    // Marker animations
+    reMarkerWidth = Tween<double>(begin: 0, end: 60).animate(
+      CurvedAnimation(
+        parent: controller,
+     curve: const Interval(0.1, 0.9, curve: Curves.decelerate),
+      ),
+    );
+    reMarkerHeight = Tween<double>(begin: 35, end: 45).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Curves.easeInOut,
+      ),
+    );
+    reMarkerScale = Tween<double>(begin: 1.0, end: 1.2).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Curves.easeInOut,
+      ),
+    );
 
 
 
-    // widthAnimation = Tween<double>(begin: 0, end: 170).animate(
-    //   CurvedAnimation(parent: controller, curve: Curves.easeOut),
-    // );
+// Add this to your MapAnimation class
 
-    // dialogHeightAnimation = Tween<double>(begin: 0, end: 200).animate(
-    //   CurvedAnimation(parent: controller, curve: Curves.easeOut),
-    // );
 
+
+// Dialog click animation - ONLY affects width
+  dialogClickMarkerWidth = Tween<double>(begin: 60, end: 30).animate(
+    CurvedAnimation(
+      parent: markerController,
+      curve: const Interval(0.0, 1.0, curve: Curves.easeInOut)
+      ,
+    ),
+  );
     controller.forward();
   }
 

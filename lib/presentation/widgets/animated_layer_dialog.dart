@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 class AnimatedLayerBox extends StatefulWidget {
   final String selectedLayer;
   final ValueChanged<String> onLayerSelected;
-  // final VoidCallback onClose;
   final bool isVisible;
 
   const AnimatedLayerBox({
     super.key,
     required this.selectedLayer,
     required this.onLayerSelected,
-    // required this.onClose,
     required this.isVisible,
   });
 
@@ -33,11 +31,15 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
     );
 
     _widthAnimation = Tween<double>(begin: 0, end: 150).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+      CurvedAnimation(parent: _controller, 
+      curve: Curves.easeInOut
+      ),
     );
 
     _heightAnimation = Tween<double>(begin: 0, end: 160).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+      CurvedAnimation(parent: _controller, 
+      curve: Curves.easeInOut
+      ),
     );
 
     if (widget.isVisible) {
@@ -60,11 +62,8 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
   }
 
   Future<void> _handleLayerSelection(String label) async {
-    // First reverse the animation
     await _controller.reverse();
-    
-    // Then notify parent about the selection
-    widget.onLayerSelected(label);
+        widget.onLayerSelected(label);
   }
 
   Widget _buildLayerOption({

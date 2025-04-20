@@ -11,8 +11,7 @@ class MapScreen extends StatefulWidget {
   _MapScreenState createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen>
-    with SingleTickerProviderStateMixin {
+class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   final MapController _mapController = MapController();
   late MapAnimation animation;
 
@@ -61,7 +60,6 @@ class _MapScreenState extends State<MapScreen>
       // _showLayerOptions = false;
     });
 
-    
     // Here you would implement the logic to change the map layer
   }
 
@@ -99,17 +97,35 @@ class _MapScreenState extends State<MapScreen>
                         height: 35,
                         point: point.latLong,
                         child: AnimatedBuilder(
-                          animation:
-                              animation.controller, // Use controller directly
+                          animation: Listenable.merge([
+                            animation.controller,
+                            animation.markerController
+                          ]), // Listen to both controllers
                           builder: (context, child) {
-                            // Debug print to verify animation is running
-                            // print('Marker animation value: ${animation.widthAnimation.value}');
+                            // Determine which width to use based on animation state
+                            double width;
+
+                            if (animation.controller.status ==
+                                AnimationStatus.forward) {
+                              // Initial load animation
+                              width = animation.markerWidth.value;
+                            } else if (animation.markerController.status ==
+                                    AnimationStatus.forward ||
+                                animation.markerController.status ==
+                                    AnimationStatus.completed) {
+                              // Dialog click animation
+                              width = animation.dialogClickMarkerWidth.value;
+                            } else {
+                              // Default state
+                              width = 60; // Or whatever your default width is
+                            }
 
                             return Align(
                               alignment: Alignment.centerLeft,
                               child: Container(
-                                width: animation.widthAnimation.value,
-                                height: animation.heightAnimation.value,
+                                width: width, // Use the calculated width
+                                height: animation.markerHeight
+                                    .value, // Height only animates on initial load
                                 padding: const EdgeInsets.all(4),
                                 decoration: const BoxDecoration(
                                   color: Colors.orange,
@@ -124,18 +140,62 @@ class _MapScreenState extends State<MapScreen>
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
+                                    // Inside your marker's AnimatedBuilder
                                     Flexible(
-                                      child: FadeTransition(
-                                        opacity: animation.fadeAnimation,
-                                        child: Text(
-                                          point.label,
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 10),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
+                                      child: AnimatedSwitcher(
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        transitionBuilder: (Widget child,
+                                            Animation<double> animation) {
+                                          return FadeTransition(
+                                            opacity: animation,
+                                            child: ScaleTransition(
+                                              scale: animation,
+                                              child: child,
+                                            ),
+                                          );
+                                        },
+                                        child: (animation.markerController
+                                                        .status ==
+                                                    AnimationStatus.forward ||
+                                                animation.markerController
+                                                        .status ==
+                                                    AnimationStatus.completed)
+                                            ? const Icon(
+                                              size: 14,
+                                                Icons.business,
+                                                color: Colors.white,
+                                                key: ValueKey(
+                                                    'business-icon'), // Important for AnimatedSwitcher
+                                              )
+                                            : Text(
+                                                point.label,
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 10),
+                                                overflow: TextOverflow.ellipsis,
+                                                key: ValueKey(
+                                                    'label-text'), // Important for AnimatedSwitcher
+                                              ),
                                       ),
                                     )
+                                    //     Flexible(
+                                    //       child: FadeTransition(
+                                    //         opacity: animation.fadeAnimation,
+                                    //         child: (animation.markerController.status ==
+                                    //     AnimationStatus.forward ||
+                                    // animation.markerController.status ==
+                                    //     AnimationStatus.completed) ? const Icon(Icons.business,
+                                    //     color: Colors.white,
+                                    //     ) :Text(
+                                    //           point.label,
+                                    //           style: const TextStyle(
+                                    //               color: Colors.white,
+                                    //               fontSize: 10),
+                                    //           overflow: TextOverflow.ellipsis,
+                                    //         ),
+                                    //       ),
+                                    //     )
                                   ],
                                 ),
                               ),
@@ -146,6 +206,79 @@ class _MapScreenState extends State<MapScreen>
                     )
                     .toList(),
               ),
+//               MarkerLayer(
+//                 rotate: true,
+//                 markers: _markerLocations
+//                     .map(
+//                       (point) => Marker(
+//                         width: 60, // Fixed outer width
+//                         height: 35,
+//                         point: point.latLong,
+//                         child: AnimatedBuilder(
+//                           animation:
+//                               animation.controller, // Use controller directly
+//                           builder: (context, child) {
+//                             // Debug print to verify animation is running
+//                             // print('Marker animation value: ${animation.widthAnimation.value}');
+//                             // final width = _showLayerOptions
+//                             //     ? animation.markerWidth.value
+//                             //     : animation.reMarkerWidth.value;
+//                             // final height = _showLayerOptions
+//                             //     ? animation.markerHeight.value
+//                             //     : animation.reMarkerHeight.value;
+//                             // final scale = _showLayerOptions
+//                             //     ? animation.markerScale.value
+//                             //     : animation.reMarkerScale.value;
+
+//                                 // In your MarkerLayer's AnimatedBuilder
+// final width = _showLayerOptions
+//     ? animation.markerWidth.value
+//     : (animation.markerController.isAnimating || animation.markerController.isCompleted)
+//         ? animation.markerShrinkWidth.value
+//         : animation.reMarkerWidth.value;
+
+//                             return Align(
+//                               alignment: Alignment.centerLeft,
+//                               child: Container(
+//                                 width: width,
+//                                 // width: animation.markerWidth.value,
+//                                 height: animation.markerHeight.value,
+//                                 padding: const EdgeInsets.all(4),
+//                                 decoration: const BoxDecoration(
+//                                   color: Colors.orange,
+//                                   borderRadius: BorderRadius.only(
+//                                     topLeft: Radius.circular(10),
+//                                     topRight: Radius.circular(10),
+//                                     bottomRight: Radius.circular(10),
+//                                     bottomLeft: Radius.circular(0),
+//                                   ),
+//                                 ),
+//                                 child: Row(
+//                                   mainAxisAlignment: MainAxisAlignment.center,
+//                                   mainAxisSize: MainAxisSize.min,
+//                                   children: [
+//                                     Flexible(
+//                                       child: FadeTransition(
+//                                         opacity: animation.fadeAnimation,
+//                                         child: Text(
+//                                           point.label,
+//                                           style: const TextStyle(
+//                                               color: Colors.white,
+//                                               fontSize: 10),
+//                                           overflow: TextOverflow.ellipsis,
+//                                         ),
+//                                       ),
+//                                     )
+//                                   ],
+//                                 ),
+//                               ),
+//                             );
+//                           },
+//                         ),
+//                       ),
+//                     )
+//                     .toList(),
+//               ),
             ],
           ),
 
@@ -289,7 +422,16 @@ class _MapScreenState extends State<MapScreen>
             AnimatedLayerBox(
               selectedLayer: _selectedLayer,
               onLayerSelected: (layer) {
+                //Animate Marker Backwards here
+                //Animate Marker Backwards here
+                //Animate Marker Backwards here
+                // animation.controller.reverse();
+
+                // Run the marker shrink animation
+                // animation.markerController.reset();
+
                 setState(() {
+                  animation.markerController.forward();
                   _selectedLayer = layer;
                   _showLayerOptions = false;
                 });
