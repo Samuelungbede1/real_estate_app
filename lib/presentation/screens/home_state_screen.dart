@@ -68,7 +68,7 @@ class _HomeScreenStateState extends State<HomeScreenState>
           opacity: _fadeAnimation,
           child: _screens[_selectedIndex],
         ),
-        // _screens[_selectedIndex],
+       
         AnimatedBuilder(
           animation: animations.controller,
           builder: (context, child) {

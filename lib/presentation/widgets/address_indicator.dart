@@ -97,15 +97,20 @@ void initState() {
                         ),
                         padding: const EdgeInsets.only(left: 20, right: 60),
                         alignment: Alignment.center,
-                        child: Opacity(
-                          opacity: progress,
-                          child: 
-                          AppText.regular(widget.address,
+                        child: FadeTransition(
+                          opacity: CurvedAnimation(
+                          parent: widget.animations!.controller,
+                          curve: const Interval(
+                            0.65,
+                            1.0,
+                            curve: Curves.easeIn,
+                          ),
+                        ),
+                          child: AppText.regular(widget.address,
                             fontSize: Responsive.fontSize(16),
                             color: AppColors.brownPrimary,
                             overflow: TextOverflow.ellipsis
                             ),
-                          
                         ),
                       ),
                     ),

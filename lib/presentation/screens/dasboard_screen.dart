@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:real_estate_app/core/utils/app_text.dart';
 import 'package:real_estate_app/core/utils/dashboard_animation.dart';
+import 'package:real_estate_app/core/utils/string_constants.dart';
 import 'package:real_estate_app/presentation/providers/property_provider.dart';
 import 'package:real_estate_app/presentation/widgets/address_indicator.dart';
 import 'package:real_estate_app/presentation/widgets/animated_location.dart';
@@ -71,7 +72,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ExpandingLocationWidget(
-                        location: 'Saint Petersburg',
+                        location: StringConstants.saintPetersburg,
                         animations: animations,
                       ),
                       SizedBox(width: Responsive.width(8)),
@@ -92,8 +93,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                           ),
                         ),
                         child: 
-                        AppText.medium("Hi, Marina",
-                                fontSize: Responsive.fontSize(24), color: AppColors.grey400),
+                        AppText.medium(StringConstants.greetings,
+                                fontSize: Responsive.fontSize(20), color: AppColors.brown),
                       
                       ),
                       ClipRect(
@@ -103,8 +104,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                           child: SlideTransition(
                             position: animations.perfectPlaceSlide,
                             child: 
-                              AppText.medium("let's select your \nperfect place",
-                                fontSize: Responsive.fontSize(30), color: AppColors.background),
+                              AppText.medium(StringConstants.dashBoardMessage,
+                                fontSize: Responsive.fontSize(30), color: AppColors.black.withOpacity(0.8)),
                             
                         
                           ),

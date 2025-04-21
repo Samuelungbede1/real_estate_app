@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../core/utils/app_colors.dart';
 import '../../core/utils/app_text.dart';
 import '../../core/utils/responsive_screen_functions.dart';
 
 class AnimatedLayerBox extends StatefulWidget {
   final String selectedLayer;
-  final Function(String label) onLayerSelected;
+  final Function(String label, IconData icon) onLayerSelected;
   final bool isVisible;
   final AnimationController? markerController;
 
@@ -63,9 +62,9 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
     super.dispose();
   }
 
-  void _handleLayerSelection(String label) async {
+  void _handleLayerSelection(String label, IconData icon) async {
     await _controller.reverse();
-    widget.onLayerSelected(label);
+    widget.onLayerSelected(label,icon);
     widget.markerController?.forward();
   }
 
@@ -84,7 +83,7 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
             size: Responsive.fontSize(15)),
         SizedBox(width: Responsive.width(12)),
         GestureDetector(
-          onTap: () => _handleLayerSelection(label),
+          onTap: () => _handleLayerSelection(label, icon),
           child: AppText.regular(
             label,
             fontSize: Responsive.fontSize(11),

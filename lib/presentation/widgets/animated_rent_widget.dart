@@ -43,7 +43,6 @@ class AnimatedRentWidget extends StatelessWidget {
               ),
             )
             .value;
-
         return Expanded(
           child: Transform.scale(
             scale: scale,
@@ -51,6 +50,18 @@ class AnimatedRentWidget extends StatelessWidget {
             child: Container(
               height: Responsive.height(180),
               decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  begin: Alignment(-0.2, -0.6),
+                  end: Alignment(0.7, 0.7),
+                  stops: [0.0, 0.1, 0.6, 1.0],
+                  colors: [
+                    Color(0xFFFFFFFF),
+                    Color(0xFFFFFFFF),
+                    Color(0xFFF8EAD8),
+                    Color(0xFFFFFFFF),
+                  ],
+                  tileMode: TileMode.clamp,
+                ),
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(Responsive.radius(16)),
               ),

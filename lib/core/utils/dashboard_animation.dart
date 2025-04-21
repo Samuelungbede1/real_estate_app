@@ -15,7 +15,7 @@ class DashboardAnimations {
   DashboardAnimations(TickerProvider vsync) {
     controller = AnimationController(
       vsync: vsync,
-      duration: const Duration(milliseconds: 6000),
+      duration: const Duration(milliseconds: 6500),
     );
 
     fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
