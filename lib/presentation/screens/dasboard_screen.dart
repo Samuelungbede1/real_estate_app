@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:real_estate_app/core/utils/app_text.dart';
 import 'package:real_estate_app/core/utils/dashboard_animation.dart';
 import 'package:real_estate_app/presentation/providers/property_provider.dart';
 import 'package:real_estate_app/presentation/widgets/address_indicator.dart';
@@ -8,6 +9,7 @@ import 'package:real_estate_app/presentation/widgets/animated_offer_widget.dart'
 import 'package:real_estate_app/presentation/widgets/animated_rent_widget.dart';
 import 'package:real_estate_app/presentation/widgets/expanding_profile_icon.dart';
 
+import '../../core/utils/app_colors.dart';
 import '../../core/utils/responsive_screen_functions.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -89,15 +91,10 @@ class _DashboardScreenState extends State<DashboardScreen>
                             curve: Curves.easeIn,
                           ),
                         ),
-                        child: Text(
-                          'Hi, Marina',
-                          style: TextStyle(
-                            fontSize: Responsive.fontSize(24),
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey,
-                          ),
-                          maxLines: 1,
-                        ),
+                        child: 
+                        AppText.medium("Hi, Marina",
+                                fontSize: Responsive.fontSize(24), color: AppColors.grey400),
+                      
                       ),
                       ClipRect(
                         child: Align(
@@ -105,14 +102,11 @@ class _DashboardScreenState extends State<DashboardScreen>
                           heightFactor: 1,
                           child: SlideTransition(
                             position: animations.perfectPlaceSlide,
-                            child: Text(
-                              "Let's select your \nperfect place",
-                              style: TextStyle(
-                                fontSize: Responsive.fontSize(28),
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
-                            ),
+                            child: 
+                              AppText.medium("let's select your \nperfect place",
+                                fontSize: Responsive.fontSize(30), color: AppColors.background),
+                            
+                        
                           ),
                         ),
                       )
@@ -336,7 +330,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                           .address,
                                                       onTap: () {},
                                                     ),
-                                                     SizedBox(height: Responsive.height(10)),
+                                                     SizedBox(height: Responsive.height(12)),
                                                   ],
                                                 ),
                                               ),

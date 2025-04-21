@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:real_estate_app/core/utils/dashboard_animation.dart';
 import 'package:real_estate_app/core/utils/responsive_screen_functions.dart';
 
+import '../../core/utils/app_colors.dart';
+import '../../core/utils/app_text.dart';
+
 class AnimatedRentWidget extends StatelessWidget {
   final DashboardAnimations animations;
 
@@ -12,7 +15,7 @@ class AnimatedRentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     Responsive.init(context);
+    Responsive.init(context);
     return AnimatedBuilder(
       animation: animations.controller,
       builder: (context, child) {
@@ -46,43 +49,29 @@ class AnimatedRentWidget extends StatelessWidget {
             scale: scale,
             alignment: Alignment.center,
             child: Container(
-              height:  Responsive.height(180),
+              height: Responsive.height(180),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular( Responsive.radius(16)),
+                borderRadius: BorderRadius.circular(Responsive.radius(16)),
               ),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                     Text(
-                      "RENT",
-                      style: TextStyle(
-                        fontSize:  Responsive.fontSize(16),
-                        color: Colors.brown,
-                      ),
-                    ),
+                    AppText.medium("RENT",
+                        fontSize: Responsive.fontSize(16),
+                        color: AppColors.brownPrimary),
                     Column(
                       children: [
-                        Text(
-                          numberAnimation.toString(),
-                          style:  TextStyle(
-                            fontSize:  Responsive.fontSize(32),
-                            fontWeight: FontWeight.bold,
-                            color: Colors.brown,
-                          ),
-                        ),
-                         SizedBox(height:  Responsive.height(4)),
-                         Text(
-                          "offers",
-                          style: TextStyle(
-                            fontSize:  Responsive.fontSize(15),
-                            color: Colors.brown,
-                          ),
-                        ),
+                        AppText.bold(numberAnimation.toString(),
+                            fontSize: Responsive.fontSize(32),
+                            color: AppColors.brownPrimary),
+                        AppText.regular("offers",
+                            fontSize: Responsive.fontSize(15),
+                            color: AppColors.brownPrimary),
                       ],
                     ),
-                     SizedBox(height:  Responsive.height(10)),
+                    SizedBox(height: Responsive.height(10)),
                   ],
                 ),
               ),

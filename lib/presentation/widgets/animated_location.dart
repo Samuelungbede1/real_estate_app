@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:real_estate_app/core/utils/dashboard_animation.dart';
 
+import '../../core/utils/app_colors.dart';
+import '../../core/utils/app_text.dart';
 import '../../core/utils/responsive_screen_functions.dart';
 
 class ExpandingLocationWidget extends StatefulWidget {
@@ -39,7 +41,7 @@ class _ExpandingLocationWidgetState extends State<ExpandingLocationWidget>
         final contentVisibility = (expandProgress - 0.8).clamp(0.0, 1.0) / 0.2;
 
         var minWidth =  2 + expandProgress;
-        final maxWidth =  MediaQuery.of(context).size.width * 0.4;
+        final maxWidth =  MediaQuery.of(context).size.width * 0.42;
         final currentWidth = minWidth + (maxWidth - minWidth) * expandProgress;
 
         return SizedBox(
@@ -71,8 +73,8 @@ class _ExpandingLocationWidgetState extends State<ExpandingLocationWidget>
                           opacity: contentVisibility,
                           child:  Icon(
                             Icons.location_on_rounded,
-                            size: Responsive.fontSize(16),
-                            color: Colors.brown,
+                            size: Responsive.fontSize(18),
+                            color: AppColors.brown,
                           ),
                         ),
                       if (showContent) const SizedBox(width: 6),
@@ -82,19 +84,29 @@ class _ExpandingLocationWidgetState extends State<ExpandingLocationWidget>
                             curve: Curves.ease,
                             duration: const Duration(milliseconds: 600),
                             opacity: contentVisibility,
-                            child: Text(
-                              widget.location,
-                              style:  TextStyle(
-                                color: Colors.brown,
-                                fontSize: Responsive.fontSize(12),
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
+                            child: 
+                            
+                            AppText.medium(widget.location,
+                                fontSize: Responsive.fontSize(13), 
+                                color: AppColors.brown,
+                                overflow: TextOverflow.ellipsis,
+                                lines: 1
+                                ),
+                      
+                      ),
+                            // Text(
+                            //   widget.location,
+                            //   style:  TextStyle(
+                            //     color: Colors.brown,
+                            //     fontSize: Responsive.fontSize(12),
+                            //   ),
+                            //   overflow: TextOverflow.ellipsis,
+                            //   maxLines: 1,
+                            // ),
                           ),
-                        ),
-                    ],
-                  );
+                        
+                
+                  ]); 
                 },
               ),
             ),

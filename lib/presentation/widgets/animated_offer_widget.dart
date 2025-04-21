@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:real_estate_app/core/utils/app_colors.dart';
 import 'package:real_estate_app/core/utils/dashboard_animation.dart';
 import 'package:real_estate_app/core/utils/responsive_screen_functions.dart';
+
+import '../../core/utils/app_text.dart';
 
 class AnimatedOfferCircle extends StatelessWidget {
   final DashboardAnimations animations;
@@ -51,33 +54,20 @@ class AnimatedOfferCircle extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                 Text(
-                  "BUY",
-                  style: TextStyle(
-                    fontSize: Responsive.fontSize(16),
-                    color: Colors.white,
-                  ),
-                ),
+                AppText.medium("BUY",
+                    fontSize: Responsive.fontSize(16), color: AppColors.white),
                 Column(
                   children: [
-                    Text(
-                      '${countAnimation.value}',
-                      style:  TextStyle(
+                    AppText.bold('${countAnimation.value}',
                         fontSize: Responsive.fontSize(32),
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                     Text(
-                      "offers",
-                      style: TextStyle(
+                        color: AppColors.white),
+                    AppText.regular("offers",
                         fontSize: Responsive.fontSize(15),
-                        color: Colors.white,
-                      ),
-                    ),
+                        color: AppColors.white),
+                  
                   ],
                 ),
-                 SizedBox(height: Responsive.height(10)),
+                SizedBox(height: Responsive.height(10)),
               ],
             ),
           ),

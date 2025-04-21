@@ -65,7 +65,13 @@ class AppColors {
 
   static const cardGradientEnd = Color(0xFFFCF5F5);
   static const transparent = Color(0x00000000); 
-  static const cardColor = Color(0xFF3f3a51); //#3f3a51
+  static const cardColor = Color(0xFF3f3a51);
+  
+
+  //Brown
+  static const brown = Color(0xFFa3967c);
+  static const brownPrimary = Color(0xFF795548);
+
 
   
 

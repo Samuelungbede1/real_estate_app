@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:real_estate_app/core/utils/dashboard_animation.dart';
+import 'dart:math' as math;
 
+import '../../core/utils/app_colors.dart';
+import '../../core/utils/app_text.dart';
 import '../../core/utils/responsive_screen_functions.dart';
 
 class AnimatedAddressIndicator extends StatefulWidget {
@@ -46,8 +49,19 @@ void initState() {
     );
   } else {
     _animation = const AlwaysStoppedAnimation<double>(1.0);
+    print("Warning: DashboardAnimations not provided to AnimatedAddressIndicator.");
   }
 }
+
+
+  // void startAnimation() {
+  //   if (widget.animations != null) {
+  //     widget.animations!.controller.reset();
+  //     widget.animations!.controller.forward();
+  //   } else {
+  //     print("Warning: Cannot start animation, DashboardAnimations not provided.");
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +73,7 @@ void initState() {
           final buttonSize = widget.buttonSize;
 
           return SizedBox(
-            height:   Responsive.height(widget.height),
+            height: widget.height,
             width: fullWidth,
             child: AnimatedBuilder(
               animation: _animation,
@@ -74,8 +88,8 @@ void initState() {
                     Positioned(
                       left: 0,
                       child: Container(
-                        width: containerWidth ,
-                        height:   widget.height,
+                        width: containerWidth,
+                        height: widget.height,
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.65),
                           borderRadius:
@@ -89,18 +103,16 @@ void initState() {
                           ],
                         ),
                         padding: const EdgeInsets.only(left: 20, right: 60),
-                        alignment: Alignment.centerLeft,
+                        alignment: Alignment.center,
                         child: Opacity(
                           opacity: progress,
-                          child: Text(
-                            widget.address,
-                            style:  TextStyle(
-                              color: Color(0xFF4A4A4A),
-                              fontSize:  Responsive.fontSize(14),
-                              fontWeight: FontWeight.normal,
+                          child: 
+                          AppText.regular(widget.address,
+                            fontSize: Responsive.fontSize(16),
+                            color: AppColors.brownPrimary,
+                            overflow: TextOverflow.ellipsis
                             ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          
                         ),
                       ),
                     ),
@@ -121,10 +133,10 @@ void initState() {
                             ),
                           ],
                         ),
-                        child:  Icon(
+                        child: const Icon(
                           Icons.chevron_right,
                           color: Colors.black54,
-                          size:  Responsive.fontSize(24),
+                          size: 24,
                         ),
                       ),
                     ),
