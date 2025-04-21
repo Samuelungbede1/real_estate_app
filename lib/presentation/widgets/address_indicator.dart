@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:real_estate_app/core/utils/dashboard_animation.dart';
 
+import '../../core/utils/responsive_screen_functions.dart';
+
 class AnimatedAddressIndicator extends StatefulWidget {
   final String address;
   final VoidCallback onTap;
@@ -57,7 +59,7 @@ void initState() {
           final buttonSize = widget.buttonSize;
 
           return SizedBox(
-            height: widget.height,
+            height:   Responsive.height(widget.height),
             width: fullWidth,
             child: AnimatedBuilder(
               animation: _animation,
@@ -72,8 +74,8 @@ void initState() {
                     Positioned(
                       left: 0,
                       child: Container(
-                        width: containerWidth,
-                        height: widget.height,
+                        width: containerWidth ,
+                        height:   widget.height,
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.65),
                           borderRadius:
@@ -92,10 +94,10 @@ void initState() {
                           opacity: progress,
                           child: Text(
                             widget.address,
-                            style: const TextStyle(
+                            style:  TextStyle(
                               color: Color(0xFF4A4A4A),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
+                              fontSize:  Responsive.fontSize(14),
+                              fontWeight: FontWeight.normal,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -119,10 +121,10 @@ void initState() {
                             ),
                           ],
                         ),
-                        child: const Icon(
+                        child:  Icon(
                           Icons.chevron_right,
                           color: Colors.black54,
-                          size: 24,
+                          size:  Responsive.fontSize(24),
                         ),
                       ),
                     ),
