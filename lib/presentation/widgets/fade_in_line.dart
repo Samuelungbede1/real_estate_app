@@ -23,7 +23,7 @@ class VerticalRevealText extends StatelessWidget {
 
     return Align(
       alignment: Alignment.bottomLeft,
-      heightFactor: animation.value, // reveals from top to bottom
+      heightFactor: animation.value,
       child: Text(
         text,
         style: style,

@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:real_estate_app/core/utils/assets.dart';
 import 'package:real_estate_app/core/utils/dashboard_animation.dart';
+import 'package:real_estate_app/core/utils/responsive_screen_functions.dart';
 import 'package:real_estate_app/presentation/widgets/custom_icon.dart';
 
 class ExpandingProfileIcon extends StatelessWidget {
@@ -13,31 +14,27 @@ class ExpandingProfileIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Responsive.init(context);
+
     return AnimatedBuilder(
       animation: animations.controller,
       builder: (context, child) {
-
         final scale = Tween<double>(begin: 0.0, end: 1.0)
-    .animate(CurvedAnimation(
-  parent: animations.controller,
-  curve: const Interval(
-    0.0, // Start at 30% of the animation duration
-    0.20,
-    curve: Curves.easeIn,
-  ),
-)).value;
-
-        // final scale = CurvedAnimation(
-        //   parent: animations.controller,
-        //   curve: Curves.linearToEaseOut, // Makes it feel more "bouncy"
-        // ).value;
-
+            .animate(CurvedAnimation(
+              parent: animations.controller,
+              curve: const Interval(
+                0.0,
+                0.20,
+                curve: Curves.easeIn,
+              ),
+            ))
+            .value;
         return Transform.scale(
-          scale: scale, // This gives the pinch zoom effect
+          scale: scale,
           alignment: Alignment.center,
           child: Container(
-            height: 45,
-            width: 45,
+            height: Responsive.height(45),
+            width: Responsive.width(45),
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
             ),

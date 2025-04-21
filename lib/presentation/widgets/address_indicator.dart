@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:real_estate_app/core/utils/dashboard_animation.dart';
 import 'dart:math' as math;
 
+import '../../core/utils/app_colors.dart';
+import '../../core/utils/app_text.dart';
+import '../../core/utils/responsive_screen_functions.dart';
+
 class AnimatedAddressIndicator extends StatefulWidget {
   final String address;
   final VoidCallback onTap;
@@ -50,14 +54,7 @@ void initState() {
 }
 
 
-  // void startAnimation() {
-  //   if (widget.animations != null) {
-  //     widget.animations!.controller.reset();
-  //     widget.animations!.controller.forward();
-  //   } else {
-  //     print("Warning: Cannot start animation, DashboardAnimations not provided.");
-  //   }
-  // }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -99,18 +96,21 @@ void initState() {
                           ],
                         ),
                         padding: const EdgeInsets.only(left: 20, right: 60),
-                        alignment: Alignment.centerLeft,
-                        child: Opacity(
-                          opacity: progress,
-                          child: Text(
-                            widget.address,
-                            style: const TextStyle(
-                              color: Color(0xFF4A4A4A),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            overflow: TextOverflow.ellipsis,
+                        alignment: Alignment.center,
+                        child: FadeTransition(
+                          opacity: CurvedAnimation(
+                          parent: widget.animations!.controller,
+                          curve: const Interval(
+                            0.65,
+                            1.0,
+                            curve: Curves.easeIn,
                           ),
+                        ),
+                          child: AppText.regular(widget.address,
+                            fontSize: Responsive.fontSize(16),
+                            color: AppColors.brownPrimary,
+                            overflow: TextOverflow.ellipsis
+                            ),
                         ),
                       ),
                     ),

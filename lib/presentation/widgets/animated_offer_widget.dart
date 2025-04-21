@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:real_estate_app/core/utils/app_colors.dart';
 import 'package:real_estate_app/core/utils/dashboard_animation.dart';
+import 'package:real_estate_app/core/utils/responsive_screen_functions.dart';
+
+import '../../core/utils/app_text.dart';
 
 class AnimatedOfferCircle extends StatelessWidget {
   final DashboardAnimations animations;
@@ -11,11 +15,12 @@ class AnimatedOfferCircle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Responsive.init(context);
     final countAnimation = IntTween(begin: 0, end: 1034).animate(
       CurvedAnimation(
         parent: animations.controller,
         curve: const Interval(
-          0.25, // slightly after the scale animation begins
+          0.25,
           0.55,
           curve: Curves.linearToEaseOut,
         ),
@@ -40,41 +45,29 @@ class AnimatedOfferCircle extends StatelessWidget {
           scale: scaleAnimation.value,
           alignment: Alignment.center,
           child: Container(
-            width: 180,
-            height: 180,
+            width: Responsive.width(190),
+            height: Responsive.height(190),
             decoration: BoxDecoration(
               color: Colors.orange,
-              borderRadius: BorderRadius.circular(100),
+              borderRadius: BorderRadius.circular(Responsive.radius(100)),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const Text(
-                  "Buy",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
+                AppText.medium("BUY",
+                    fontSize: Responsive.fontSize(16), color: AppColors.white),
                 Column(
                   children: [
-                    Text(
-                      '${countAnimation.value}',
-                      style: const TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const Text(
-                      "offers",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                      ),
-                    ),
+                    AppText.bold('${countAnimation.value}',
+                        fontSize: Responsive.fontSize(32),
+                        color: AppColors.white),
+                    AppText.regular("offers",
+                        fontSize: Responsive.fontSize(15),
+                        color: AppColors.white),
+                  
                   ],
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: Responsive.height(10)),
               ],
             ),
           ),
