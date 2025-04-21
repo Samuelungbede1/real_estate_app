@@ -6,6 +6,8 @@ import 'package:real_estate_app/core/utils/map_animation.dart';
 import 'package:real_estate_app/core/utils/string_constants.dart';
 import 'package:real_estate_app/presentation/widgets/animated_layer_dialog.dart';
 
+import '../../core/utils/app_colors.dart';
+import '../../core/utils/app_text.dart';
 import '../../core/utils/responsive_screen_functions.dart';
 import '../providers/property_provider.dart';
 
@@ -196,7 +198,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                         scale: animation.searchBarScale,
                         alignment: Alignment.center,
                         child: Container(
-                          height: Responsive.height(40),
+                          height: Responsive.height(45),
                           padding:  EdgeInsets.symmetric(horizontal: Responsive.width(16)),
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -213,14 +215,14 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                               Expanded(
                                 child: FadeTransition(
                                   opacity: animation.searchBarWidth,
-                                  child:  Text(
-                                    'Saint Petersburg',
-                                    style: TextStyle(
-                                      color: Colors.black87,
-                                      fontSize: Responsive.fontSize(16),
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+                                  child:  
+                                   AppText.regular("Saint Petersburg",
+                            fontSize: Responsive.fontSize(15),
+                            color: AppColors.black,
+                            overflow: TextOverflow.ellipsis,
+                            ),
+                                  
+                                
                                 ),
                               ),
                             ],
@@ -241,13 +243,13 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                       scale: animation.filterIconScale,
                       alignment: Alignment.center,
                       child: Container(
-                        height: Responsive.height(40),
-                        width: Responsive.width(40),
+                        height: Responsive.height(45),
+                        width: Responsive.width(45),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.white,
                           borderRadius: BorderRadius.circular(Responsive.radius(25)),
                         ),
-                        child: const Icon(Icons.tune, color: Colors.grey),
+                        child:  const Icon(Icons.tune, color: AppColors.grey400),
                       ),
                     );
                   },
@@ -347,15 +349,13 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.list, color: Colors.grey.shade300),
+                        const Icon(Icons.list, color: AppColors.grey300),
                          SizedBox(width:Responsive.width(8)),
-                        Text(
-                          'List of variants',
-                          style: TextStyle(
-                            color: Colors.grey.shade300,
+
+                         AppText.regular("List of variants",
                             fontSize: Responsive.fontSize(12),
-                          ),
-                        ),
+                            color: AppColors.grey300),
+                      
                       ],
                     ),
                   ),
@@ -368,38 +368,5 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildLayerOption({
-    required IconData icon,
-    required String label,
-    required Color color,
-  }) {
-    bool isSelected = _selectedLayer == label;
-
-    return GestureDetector(
-      onTap: () => _selectLayer(label),
-      child: Row(
-        children: [
-          Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(icon, color: color, size: 18),
-          ),
-          const SizedBox(width: 12),
-          Text(
-            label,
-            style: TextStyle(
-              color: isSelected ? Colors.orange : Colors.grey.shade600,
-              fontSize: 12,
-              fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 

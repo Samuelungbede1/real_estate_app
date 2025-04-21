@@ -30,7 +30,7 @@ class ExpandingProfileIcon extends StatelessWidget {
             ))
             .value;
         return Transform.scale(
-          scale: scale, // This gives the pinch zoom effect
+          scale: scale,
           alignment: Alignment.center,
           child: Container(
             height: Responsive.height(45),

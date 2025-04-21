@@ -49,11 +49,7 @@ class _HomeScreenStateState extends State<HomeScreenState>
     const MapScreen(),
   ];
 
-  // void _onItemTapped(int index) {
-  //   setState(() {
-  //     _selectedIndex = index;
-  //   });
-  // }
+ 
 
   void _onItemTapped(int index) {
     if (index != _selectedIndex) {

@@ -9,7 +9,6 @@ class ErrorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // backgroundColor: AppColorPalette.bgColor,
         appBar: AppBar(
           elevation: 0,
           leading: IconButton(

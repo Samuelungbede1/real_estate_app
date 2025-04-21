@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../core/utils/app_colors.dart';
+import '../../core/utils/app_text.dart';
 import '../../core/utils/responsive_screen_functions.dart';
 
 class AnimatedLayerBox extends StatefulWidget {
@@ -63,13 +65,7 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
 
   void _handleLayerSelection(String label) async {
     await _controller.reverse();
-    //  widget.markerController!.reverse();
-
-    // Pass both the selected label AND our animation controller
-    // This allows the parent to synchronize with our animation
     widget.onLayerSelected(label);
-
-    // If marker controller was passed, we can also start it directly
     widget.markerController?.forward();
   }
 
@@ -84,17 +80,15 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Icon(icon,
-            color: isSelected ? Colors.orange : Colors.grey.shade600, size: Responsive.fontSize(15)),
-         SizedBox(width: Responsive.width(12)),
+            color: isSelected ? Colors.orange : Colors.grey.shade600,
+            size: Responsive.fontSize(15)),
+        SizedBox(width: Responsive.width(12)),
         GestureDetector(
           onTap: () => _handleLayerSelection(label),
-          child: Text(
+          child: AppText.regular(
             label,
-            style: TextStyle(
-              color: isSelected ? Colors.orange : Colors.grey.shade600,
-              fontSize: Responsive.fontSize(11),
-              fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
-            ),
+            fontSize: Responsive.fontSize(11),
+            color: isSelected ? Colors.orange : Colors.grey.shade600,
           ),
         ),
       ],
@@ -105,7 +99,6 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: Listenable.merge([_controller, widget.markerController]),
-      // animation: _controller,
       builder: (context, child) {
         return Positioned(
           bottom: 205,

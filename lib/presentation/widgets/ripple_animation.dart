@@ -56,7 +56,6 @@ class _RippleAnimationState extends State<RippleAnimation>
       ),
     );
 
-    // Stroke width animations
     _innerStroke = Tween<double>(begin: 0, end: 6).animate(
       CurvedAnimation(
         parent: _controller,
@@ -133,13 +132,11 @@ class _RipplePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
 
-    // Outer circle
     final outerPaint = Paint()
       ..color = Colors.white.withOpacity(0.6)
       ..style = PaintingStyle.stroke
       ..strokeWidth = outerStroke;
 
-    // Inner circle
     final innerPaint = Paint()
       ..color =Colors.white.withOpacity(0.4)
       ..style = PaintingStyle.stroke

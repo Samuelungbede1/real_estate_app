@@ -54,14 +54,7 @@ void initState() {
 }
 
 
-  // void startAnimation() {
-  //   if (widget.animations != null) {
-  //     widget.animations!.controller.reset();
-  //     widget.animations!.controller.forward();
-  //   } else {
-  //     print("Warning: Cannot start animation, DashboardAnimations not provided.");
-  //   }
-  // }
+  
 
   @override
   Widget build(BuildContext context) {

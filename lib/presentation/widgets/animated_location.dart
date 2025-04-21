@@ -94,15 +94,7 @@ class _ExpandingLocationWidgetState extends State<ExpandingLocationWidget>
                                 ),
                       
                       ),
-                            // Text(
-                            //   widget.location,
-                            //   style:  TextStyle(
-                            //     color: Colors.brown,
-                            //     fontSize: Responsive.fontSize(12),
-                            //   ),
-                            //   overflow: TextOverflow.ellipsis,
-                            //   maxLines: 1,
-                            // ),
+                      
                           ),
                         
                 
