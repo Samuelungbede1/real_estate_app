@@ -41,11 +41,11 @@ class _RippleAnimationState extends State<RippleAnimation>
     );
 
     _outerRadius =
-        Tween<double>(begin: widget.size * 0.15, end: widget.size * 0.45)
+        Tween<double>(begin: widget.size * 0.15, end: widget.size * 0.32)
             .animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.2, 0.4, curve: Curves.easeOut),
+        curve: const Interval(0.2, 0.6, curve: Curves.easeInOutBack),
       ),
     );
 

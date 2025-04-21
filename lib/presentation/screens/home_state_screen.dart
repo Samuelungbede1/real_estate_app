@@ -13,20 +13,32 @@ class HomeScreenState extends StatefulWidget {
 }
 
 class _HomeScreenStateState extends State<HomeScreenState>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   int _selectedIndex = 2;
 
   late DashboardAnimations animations;
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
 
   @override
   void initState() {
     super.initState();
     animations = DashboardAnimations(this);
+    _fadeController = AnimationController(
+      
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+      
+    );
+    _fadeAnimation =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_fadeController);
+    _fadeController.forward();
   }
 
   @override
   void dispose() {
     animations.dispose();
+    _fadeController.dispose();
     super.dispose();
   }
 
@@ -38,17 +50,32 @@ class _HomeScreenStateState extends State<HomeScreenState>
     const MapScreen(),
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  // void _onItemTapped(int index) {
+  //   setState(() {
+  //     _selectedIndex = index;
+  //   });
+  // }
+
+
+   void _onItemTapped(int index) {
+    if (index != _selectedIndex) {
+      _fadeController.reset();
+      setState(() => _selectedIndex = index);
+      _fadeController.reverse();
+    }
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(children: [
-        _screens[_selectedIndex],
+        FadeTransition(
+          opacity: _fadeAnimation,
+          child: _screens[_selectedIndex],
+        ),
+        // _screens[_selectedIndex],
         AnimatedBuilder(
           animation: animations.controller,
           builder: (context, child) {
@@ -81,37 +108,32 @@ class _HomeScreenStateState extends State<HomeScreenState>
     );
   }
 
-
-
-
-Widget _buildNavItem(int index, IconData icon, bool isSelected) {
-  return RippleAnimation(
-    onTap: () => setState(() => _selectedIndex = index),
-    child: Material(
-      color: Colors.transparent,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          AnimatedContainer(
-            curve: Curves.easeIn,
-            duration: const Duration(milliseconds: 500),
-            width: isSelected ? 45 : 38,
-            height: isSelected ? 45 : 38,
-            decoration: BoxDecoration(
-              color: isSelected ? Colors.orange : Colors.black26,
-              shape: BoxShape.circle,
+  Widget _buildNavItem(int index, IconData icon, bool isSelected) {
+    return RippleAnimation(
+      onTap: () => setState(() => _selectedIndex = index),
+      child: Material(
+        color: Colors.transparent,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            AnimatedContainer(
+              curve: Curves.easeIn,
+              duration: const Duration(milliseconds: 500),
+              width: isSelected ? 45 : 38,
+              height: isSelected ? 45 : 38,
+              decoration: BoxDecoration(
+                color: isSelected ? Colors.orange : Colors.black26,
+                shape: BoxShape.circle,
+              ),
             ),
-          ),
-          Icon(
-            icon,
-            color: Colors.white,
-            size: 18,
-          ),
-        ],
+            Icon(
+              icon,
+              color: Colors.white,
+              size: 18,
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}
-
-
+    );
+  }
 }
