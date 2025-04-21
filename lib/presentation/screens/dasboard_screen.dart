@@ -8,6 +8,8 @@ import 'package:real_estate_app/presentation/widgets/animated_offer_widget.dart'
 import 'package:real_estate_app/presentation/widgets/animated_rent_widget.dart';
 import 'package:real_estate_app/presentation/widgets/expanding_profile_icon.dart';
 
+import '../../core/utils/responsive_screen_functions.dart';
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
@@ -36,6 +38,7 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   @override
   Widget build(BuildContext context) {
+    Responsive.init(context);
     final propertyProvider = context.watch<PropertyProvider>();
 
     return Scaffold(
@@ -56,10 +59,9 @@ class _DashboardScreenState extends State<DashboardScreen>
               ),
             ),
           ),
-
           SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(Responsive.width(16)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -68,14 +70,13 @@ class _DashboardScreenState extends State<DashboardScreen>
                     children: [
                       ExpandingLocationWidget(
                         location: 'Saint Petersburg',
-                        animations:
-                            animations,
+                        animations: animations,
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: Responsive.width(8)),
                       ExpandingProfileIcon(animations: animations),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: Responsive.width(20)),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -88,10 +89,10 @@ class _DashboardScreenState extends State<DashboardScreen>
                             curve: Curves.easeIn,
                           ),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Hi, Marina',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: Responsive.fontSize(24),
                             fontWeight: FontWeight.bold,
                             color: Colors.grey,
                           ),
@@ -104,10 +105,10 @@ class _DashboardScreenState extends State<DashboardScreen>
                           heightFactor: 1,
                           child: SlideTransition(
                             position: animations.perfectPlaceSlide,
-                            child: const Text(
+                            child: Text(
                               "Let's select your \nperfect place",
                               style: TextStyle(
-                                fontSize: 28,
+                                fontSize: Responsive.fontSize(28),
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87,
                               ),
@@ -117,45 +118,46 @@ class _DashboardScreenState extends State<DashboardScreen>
                       )
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: Responsive.height(20)),
                   Row(
                     children: [
                       AnimatedOfferCircle(animations: animations),
-                      const SizedBox(
-                        width: 10,
+                      SizedBox(
+                        width: Responsive.width(10),
                       ),
                       AnimatedRentWidget(animations: animations)
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: Responsive.height(10)),
                 ],
               ),
             ),
           ),
-
           Align(
             alignment: Alignment.bottomCenter,
             child: AnimatedBuilder(
               animation: animations.controller,
               builder: (context, child) {
                 return DraggableScrollableSheet(
-                  initialChildSize: animations.sheetSizeAnimation.value,
-                  minChildSize: 0.0006,
-                  maxChildSize: 0.68,
+                  initialChildSize:
+                      Responsive.height(animations.sheetSizeAnimation.value)*0.95,
+                  minChildSize: Responsive.height(
+                      animations.sheetSizeAnimation.value * 0.62),
+                  maxChildSize: Responsive.height(0.65),
                   builder: (BuildContext context,
                       ScrollController scrollController) {
                     if (propertyProvider.isLoading) {
                       return Container(
-                        decoration: const BoxDecoration(
+                        decoration:  BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(32),
-                            topRight: Radius.circular(32),
+                            topLeft: Radius.circular(Responsive.radius(32)),
+                            topRight: Radius.circular(Responsive.radius(32)),
                           ),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black12,
-                              blurRadius: 10,
+                              blurRadius: Responsive.radius(10),
                             )
                           ],
                         ),
@@ -203,22 +205,22 @@ class _DashboardScreenState extends State<DashboardScreen>
                       );
                     }
                     return Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: const BoxDecoration(
+                      padding:  EdgeInsets.all(Responsive.width(8)),
+                      decoration:  BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(32),
-                          topRight: Radius.circular(32),
+                          topLeft: Radius.circular(Responsive.radius(32)),
+                          topRight: Radius.circular(Responsive.radius(32)),
                         ),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black12,
-                            blurRadius: 10,
+                            blurRadius: Responsive.radius(10),
                           )
                         ],
                       ),
                       child: ListView(
-                        shrinkWrap: true,
+                        shrinkWrap: false,
                         padding: EdgeInsets.zero,
                         controller: scrollController,
                         children: [
@@ -226,7 +228,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                             children: [
                               if (propertyProvider.properties.isNotEmpty)
                                 ClipRRect(
-                                  borderRadius: BorderRadius.circular(24),
+                                  borderRadius: BorderRadius.circular(Responsive.radius(24)),
                                   child: Container(
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
@@ -235,7 +237,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                         fit: BoxFit.cover,
                                       ),
                                     ),
-                                    height: 190,
+                                    height: Responsive.height(240),
                                     width: double.infinity,
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.end,
@@ -248,12 +250,12 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               .properties[0].location.address,
                                           onTap: () {},
                                         ),
-                                        const SizedBox(height: 10),
+                                         SizedBox(height: Responsive.height(10)),
                                       ],
                                     ),
                                   ),
                                 ),
-                              const SizedBox(height: 8),
+                               SizedBox(height: Responsive.height(8)),
                               if (propertyProvider.properties.length > 1)
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,7 +272,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               fit: BoxFit.cover,
                                             ),
                                           ),
-                                          height: 320,
+                                          height: Responsive.height(400),
                                           width: double.infinity,
                                           child: Column(
                                             mainAxisAlignment:
@@ -291,13 +293,13 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                       .address,
                                                   onTap: () {},
                                                 ),
-                                              const SizedBox(height: 10),
+                                               SizedBox(height:Responsive.height(10)),
                                             ],
                                           ),
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(width: 8),
+                                     SizedBox(width: Responsive.width(8)),
                                     if (propertyProvider.properties.length > 2)
                                       Expanded(
                                         flex: 1,
@@ -305,7 +307,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                           children: [
                                             ClipRRect(
                                               borderRadius:
-                                                  BorderRadius.circular(24),
+                                                  BorderRadius.circular(Responsive.radius(24)),
                                               child: Container(
                                                 decoration: BoxDecoration(
                                                   image: DecorationImage(
@@ -316,7 +318,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
-                                                height: 156,
+                                                height: Responsive.height(196),
                                                 width: double.infinity,
                                                 child: Column(
                                                   mainAxisAlignment:
@@ -334,15 +336,15 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                           .address,
                                                       onTap: () {},
                                                     ),
-                                                    const SizedBox(height: 10),
+                                                     SizedBox(height: Responsive.height(10)),
                                                   ],
                                                 ),
                                               ),
                                             ),
-                                            const SizedBox(height: 8),
+                                             SizedBox(height: Responsive.height(8)),
                                             ClipRRect(
                                               borderRadius:
-                                                  BorderRadius.circular(24),
+                                                  BorderRadius.circular(Responsive.radius(24)),
                                               child: Container(
                                                 decoration: BoxDecoration(
                                                   image: DecorationImage(
@@ -353,7 +355,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
-                                                height: 156,
+                                                height: Responsive.height(196),
                                                 width: double.infinity,
                                                 child: Column(
                                                   mainAxisAlignment:
@@ -375,7 +377,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                                 .address,
                                                         onTap: () {},
                                                       ),
-                                                    const SizedBox(height: 10),
+                                                     SizedBox(height: Responsive.height(10)),
                                                   ],
                                                 ),
                                               ),
@@ -400,138 +402,6 @@ class _DashboardScreenState extends State<DashboardScreen>
     );
   }
 
-  static Widget _offerCardRound(String label, String count, Color bgColor,
-      {bool darkText = false}) {
-    return Container(
-      width: 180,
-      height: 180,
-      decoration: BoxDecoration(
-        color: Colors.orange,
-        borderRadius: BorderRadius.circular(100),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          const Text(
-            "Buy",
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-          Column(
-            children: [
-              Text(
-                '1034',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: darkText ? Colors.black87 : Colors.white,
-                ),
-              ),
-              const Text(
-                "offers",
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-        ],
-      ),
-    );
-  }
 
-  static Widget _offerCard(String label, String count, Color bgColor,
-      {bool darkText = false}) {
-    return Expanded(
-      child: Container(
-        height: 180,
-        // width: 200,
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const Text(
-                "RENT",
-                style: TextStyle(
-                  color: Colors.brown,
-                ),
-              ),
-              Column(
-                children: [
-                  Text(
-                    count,
-                    style: const TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.brown,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    "offers",
-                    style: TextStyle(
-                      color: Colors.brown,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
-  Widget _buildAnimatedLocation(DashboardAnimations animations) {
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(-0.5, 0),
-        end: Offset.zero,
-      ).animate(
-        CurvedAnimation(
-          parent: animations.controller,
-          curve: const Interval(0.1, 0.5, curve: Curves.easeInOut),
-        ),
-      ),
-      child: FadeTransition(
-        opacity: animations.fadeAnimation,
-        child: Container(
-          height: 45,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: const Row(
-            children: [
-              Icon(Icons.location_on_rounded, size: 16, color: Colors.brown),
-              SizedBox(width: 8),
-              Text(
-                'Saint Petersburg',
-                style: TextStyle(
-                  color: Colors.brown,
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }

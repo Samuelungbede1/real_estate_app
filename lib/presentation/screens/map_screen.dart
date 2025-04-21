@@ -6,8 +6,8 @@ import 'package:real_estate_app/core/utils/map_animation.dart';
 import 'package:real_estate_app/core/utils/string_constants.dart';
 import 'package:real_estate_app/presentation/widgets/animated_layer_dialog.dart';
 
+import '../../core/utils/responsive_screen_functions.dart';
 import '../providers/property_provider.dart';
-import '../widgets/ripple_animation.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -58,6 +58,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    Responsive.init(context);
     final propertyProvider = context.watch<PropertyProvider>();
 
     return Scaffold(
@@ -183,8 +184,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
           ),
           Positioned(
             top: MediaQuery.of(context).padding.top + 10,
-            left: 16,
-            right: 16,
+            left: Responsive.width(18),
+            right: Responsive.width(18),
             child: Row(
               children: [
                 Expanded(
@@ -195,11 +196,11 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                         scale: animation.searchBarScale,
                         alignment: Alignment.center,
                         child: Container(
-                          height: 45,
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          height: Responsive.height(40),
+                          padding:  EdgeInsets.symmetric(horizontal: Responsive.width(16)),
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(25),
+                            borderRadius: BorderRadius.circular(Responsive.radius(25)),
                           ),
                           child: Row(
                             children: [
@@ -208,15 +209,15 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                 child: const Icon(Icons.search,
                                     color: Colors.grey),
                               ),
-                              const SizedBox(width: 8),
+                               SizedBox(width: Responsive.width(8)),
                               Expanded(
                                 child: FadeTransition(
                                   opacity: animation.searchBarWidth,
-                                  child: const Text(
+                                  child:  Text(
                                     'Saint Petersburg',
                                     style: TextStyle(
                                       color: Colors.black87,
-                                      fontSize: 16,
+                                      fontSize: Responsive.fontSize(16),
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -230,7 +231,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   ),
                 ),
 
-                const SizedBox(width: 10),
+                 SizedBox(width: Responsive.width(10)),
 
                 // Animated Filter/Tune Button
                 AnimatedBuilder(
@@ -240,11 +241,11 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                       scale: animation.filterIconScale,
                       alignment: Alignment.center,
                       child: Container(
-                        height: 45,
-                        width: 45,
+                        height: Responsive.height(40),
+                        width: Responsive.width(40),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(25),
+                          borderRadius: BorderRadius.circular(Responsive.radius(25)),
                         ),
                         child: const Icon(Icons.tune, color: Colors.grey),
                       ),
@@ -256,11 +257,10 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
           ),
           Positioned(
             bottom: 140,
-            left: 16,
+            left: Responsive.width(16),
             child: Column(
               children: [
-                RippleAnimation(
-                  size: 40,
+                GestureDetector(
                   onTap: () {
                     print('TAPPED - Layer Button');
                     _toggleLayerOptions();
@@ -272,8 +272,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                         scale: animation.filterIconScale,
                         alignment: Alignment.center,
                         child: Container(
-                          height: 40,
-                          width: 40,
+                          height: Responsive.height(45),
+                          width: Responsive.width(45),
                           decoration: BoxDecoration(
                             color: Colors.grey.shade700,
                             shape: BoxShape.circle,
@@ -287,7 +287,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     },
                   ),
                 ),
-                const SizedBox(height: 10),
+                 SizedBox(height: Responsive.width(10)),
                 // Navigation button
                 AnimatedBuilder(
                   animation: animation.controller,
@@ -296,8 +296,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                       scale: animation.filterIconScale,
                       alignment: Alignment.center,
                       child: Container(
-                        height: 40,
-                        width: 40,
+                        height: Responsive.height(45),
+                        width: Responsive.width(45),
                         decoration: BoxDecoration(
                           color: Colors.grey.shade700,
                           shape: BoxShape.circle,
@@ -329,7 +329,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
             ),
 
           Positioned(
-            bottom: 140,
+            bottom: 145,
             right: 16,
             child: AnimatedBuilder(
               animation: animation.controller,
@@ -338,22 +338,22 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   scale: animation.searchBarScale,
                   alignment: Alignment.center,
                   child: Container(
-                    height: 35,
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    height: Responsive.height(35),
+                    padding:  EdgeInsets.symmetric(horizontal: Responsive.width(8)),
                     decoration: BoxDecoration(
                       color: Colors.grey.shade700,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(Responsive.radius(20)),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.list, color: Colors.grey.shade300),
-                        const SizedBox(width: 8),
+                         SizedBox(width:Responsive.width(8)),
                         Text(
                           'List of variants',
                           style: TextStyle(
                             color: Colors.grey.shade300,
-                            fontSize: 12,
+                            fontSize: Responsive.fontSize(12),
                           ),
                         ),
                       ],

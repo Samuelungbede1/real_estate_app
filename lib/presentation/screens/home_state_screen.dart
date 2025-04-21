@@ -3,6 +3,7 @@ import 'package:real_estate_app/core/utils/dashboard_animation.dart';
 import 'package:real_estate_app/presentation/screens/dasboard_screen.dart';
 import 'package:real_estate_app/presentation/screens/map_screen.dart';
 
+import '../../core/utils/responsive_screen_functions.dart';
 import '../widgets/ripple_animation.dart';
 
 class HomeScreenState extends StatefulWidget {
@@ -25,10 +26,8 @@ class _HomeScreenStateState extends State<HomeScreenState>
     super.initState();
     animations = DashboardAnimations(this);
     _fadeController = AnimationController(
-      
       duration: const Duration(milliseconds: 1500),
       vsync: this,
-      
     );
     _fadeAnimation =
         Tween<double>(begin: 0.0, end: 1.0).animate(_fadeController);
@@ -56,8 +55,7 @@ class _HomeScreenStateState extends State<HomeScreenState>
   //   });
   // }
 
-
-   void _onItemTapped(int index) {
+  void _onItemTapped(int index) {
     if (index != _selectedIndex) {
       _fadeController.reset();
       setState(() => _selectedIndex = index);
@@ -65,10 +63,9 @@ class _HomeScreenStateState extends State<HomeScreenState>
     }
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
+    Responsive.init(context);
     return Scaffold(
       body: Stack(children: [
         FadeTransition(
@@ -87,10 +84,10 @@ class _HomeScreenStateState extends State<HomeScreenState>
             );
           },
           child: Container(
-            height: 55,
+            height: Responsive.height(55),
             decoration: BoxDecoration(
               color: Colors.grey.shade900,
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(Responsive.radius(30)),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -119,8 +116,8 @@ class _HomeScreenStateState extends State<HomeScreenState>
             AnimatedContainer(
               curve: Curves.easeIn,
               duration: const Duration(milliseconds: 500),
-              width: isSelected ? 45 : 38,
-              height: isSelected ? 45 : 38,
+              width: isSelected ? Responsive.width(45) : Responsive.width(38),
+              height: isSelected ? Responsive.height(45) : Responsive.height(38),
               decoration: BoxDecoration(
                 color: isSelected ? Colors.orange : Colors.black26,
                 shape: BoxShape.circle,
@@ -129,7 +126,7 @@ class _HomeScreenStateState extends State<HomeScreenState>
             Icon(
               icon,
               color: Colors.white,
-              size: 18,
+              size: Responsive.fontSize(18),
             ),
           ],
         ),

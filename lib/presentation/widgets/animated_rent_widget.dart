@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:real_estate_app/core/utils/dashboard_animation.dart';
+import 'package:real_estate_app/core/utils/responsive_screen_functions.dart';
 
 class AnimatedRentWidget extends StatelessWidget {
   final DashboardAnimations animations;
@@ -11,6 +12,7 @@ class AnimatedRentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     Responsive.init(context);
     return AnimatedBuilder(
       animation: animations.controller,
       builder: (context, child) {
@@ -44,18 +46,19 @@ class AnimatedRentWidget extends StatelessWidget {
             scale: scale,
             alignment: Alignment.center,
             child: Container(
-              height: 180,
+              height:  Responsive.height(180),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular( Responsive.radius(16)),
               ),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const Text(
+                     Text(
                       "RENT",
                       style: TextStyle(
+                        fontSize:  Responsive.fontSize(16),
                         color: Colors.brown,
                       ),
                     ),
@@ -63,22 +66,23 @@ class AnimatedRentWidget extends StatelessWidget {
                       children: [
                         Text(
                           numberAnimation.toString(),
-                          style: const TextStyle(
-                            fontSize: 32,
+                          style:  TextStyle(
+                            fontSize:  Responsive.fontSize(32),
                             fontWeight: FontWeight.bold,
                             color: Colors.brown,
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        const Text(
+                         SizedBox(height:  Responsive.height(4)),
+                         Text(
                           "offers",
                           style: TextStyle(
+                            fontSize:  Responsive.fontSize(15),
                             color: Colors.brown,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                     SizedBox(height:  Responsive.height(10)),
                   ],
                 ),
               ),

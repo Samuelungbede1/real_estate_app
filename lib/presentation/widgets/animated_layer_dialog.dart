@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../core/utils/responsive_screen_functions.dart';
+
 class AnimatedLayerBox extends StatefulWidget {
   final String selectedLayer;
   final Function(String label) onLayerSelected;
   final bool isVisible;
-    final AnimationController? markerController;
+  final AnimationController? markerController;
 
   const AnimatedLayerBox({
     super.key,
@@ -45,9 +47,6 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
     }
   }
 
-
-  
-
   @override
   void didUpdateWidget(covariant AnimatedLayerBox oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -65,11 +64,11 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
   void _handleLayerSelection(String label) async {
     await _controller.reverse();
     //  widget.markerController!.reverse();
-    
+
     // Pass both the selected label AND our animation controller
     // This allows the parent to synchronize with our animation
     widget.onLayerSelected(label);
-    
+
     // If marker controller was passed, we can also start it directly
     widget.markerController?.forward();
   }
@@ -84,15 +83,16 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(icon, color: isSelected ? Colors.orange : Colors.grey.shade600, size: 15),
-        const SizedBox(width: 12),
+        Icon(icon,
+            color: isSelected ? Colors.orange : Colors.grey.shade600, size: Responsive.fontSize(15)),
+         SizedBox(width: Responsive.width(12)),
         GestureDetector(
           onTap: () => _handleLayerSelection(label),
           child: Text(
             label,
             style: TextStyle(
               color: isSelected ? Colors.orange : Colors.grey.shade600,
-              fontSize: 11,
+              fontSize: Responsive.fontSize(11),
               fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
             ),
           ),
@@ -104,26 +104,25 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: Listenable.merge([
-                            _controller,
-                            widget.markerController
-                          ]),
+      animation: Listenable.merge([_controller, widget.markerController]),
       // animation: _controller,
       builder: (context, child) {
         return Positioned(
-          bottom: 190,
-          left: 16,
+          bottom: 205,
+          left: 20,
           child: Container(
-            height: _heightAnimation.value,
-            width: _widthAnimation.value,
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+            height: Responsive.height(_heightAnimation.value),
+            width: Responsive.width(_widthAnimation.value),
+            padding: EdgeInsets.symmetric(
+                vertical: Responsive.width(12),
+                horizontal: Responsive.height(10)),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(Responsive.radius(16)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
+                  blurRadius: Responsive.radius(10),
                   spreadRadius: 1,
                 ),
               ],
@@ -138,19 +137,19 @@ class _AnimatedLayerBoxState extends State<AnimatedLayerBox>
                         label: "Cosy areas",
                         color: Colors.green.shade300,
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: Responsive.height(16)),
                       _buildLayerOption(
                         icon: Icons.wallet,
                         label: "Price",
                         color: Colors.orange,
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: Responsive.height(16)),
                       _buildLayerOption(
                         icon: Icons.network_ping_sharp,
                         label: "Infrastructure",
                         color: Colors.grey,
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: Responsive.height(16)),
                       _buildLayerOption(
                         icon: Icons.layers,
                         label: "Without any layer",

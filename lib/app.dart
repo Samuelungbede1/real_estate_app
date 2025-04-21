@@ -11,10 +11,10 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   
+   Responsive.init(context); 
 
     return ScreenUtilInit(
-      designSize: const Size(MockupWidth, MockupHeight),
+      designSize: const Size(Responsive.mockupWidth, Responsive.mockupHeight),
       minTextAdapt: true,
       builder: (BuildContext context, Widget? child) => MaterialApp(
         
