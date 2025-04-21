@@ -81,130 +81,37 @@ class _HomeScreenStateState extends State<HomeScreenState>
     );
   }
 
-  // Widget _buildNavItem(int index, IconData icon, bool isSelected) {
-  //   return GestureDetector(
-  //     onTap: () {
-  //       setState(() {
-  //         _selectedIndex = index;
-  //       });
-  //     },
-  //     child: isSelected ?Container(
-  //       width: 45,
-  //       height: 45,
-  //       decoration: const BoxDecoration(
-  //         color:  Colors.orange,
-  //         shape: BoxShape.circle,
-  //       ),
-  //       child: Icon(
-  //         icon,
-  //         color: isSelected ? Colors.white : Colors.white,
-  //         size: 20,
-  //       ),
-  //     ): Container(
-  //       width: 38,
-  //       height: 38,
-  //       decoration: const BoxDecoration(
-  //         color:  Colors.black26,
-  //         shape: BoxShape.circle,
-  //       ),
-  //       child: Icon(
-  //         icon,
-  //         color: isSelected ? Colors.white : Colors.white,
-  //         size: 20,
-  //       ),
-  //     ),
-  //   );
-  // }
-// Widget _buildNavItem(int index, IconData icon, bool isSelected) {
-//   return Material(
-//     color: Colors.transparent,
-//     child: Stack(
-//       alignment: Alignment.center,
-//       children: [
-//         // Background container
-//         Container(
-//           width: isSelected ? 45 : 38,
-//           height: isSelected ? 45 : 38,
-//           decoration: BoxDecoration(
-//             color: isSelected ? Colors.orange : Colors.black26,
-//             shape: BoxShape.circle,
-//           ),
-//         ),
-//         // Icon
-//         Icon(
-//           icon,
-//           color: Colors.white,
-//           size: 20,
-//         ),
-//         // Ripple effect
-//         Positioned.fill(
-//           child: Material(
-//             color: Colors.transparent,
-//             child: InkWell(
-//               onTap: () {
-//                 setState(() {
-//                   _selectedIndex = index;
-//                 });
-//               },
-//               borderRadius: BorderRadius.circular(30),
-//               splashColor: Colors.white.withOpacity(0.5),
-//               highlightColor: Colors.white.withOpacity(0.2),
-//               radius: 40,
-//             ),
-//           ),
-//         ),
-       
-//       ],
-//     ),
-//   );
-// }
+
 
 
 Widget _buildNavItem(int index, IconData icon, bool isSelected) {
   return RippleAnimation(
-    // size: isSelected ? 45 : 38,
     onTap: () => setState(() => _selectedIndex = index),
-    child:  Material(
-    color: Colors.transparent,
-    child: Stack(
-      alignment: Alignment.center,
-      children: [
-        // Background container
-        Container(
-          width: isSelected ? 45 : 38,
-          height: isSelected ? 45 : 38,
-          decoration: BoxDecoration(
-            color: isSelected ? Colors.orange : Colors.black26,
-            shape: BoxShape.circle,
+    child: Material(
+      color: Colors.transparent,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          AnimatedContainer(
+            curve: Curves.easeIn,
+            duration: const Duration(milliseconds: 500),
+            width: isSelected ? 45 : 38,
+            height: isSelected ? 45 : 38,
+            decoration: BoxDecoration(
+              color: isSelected ? Colors.orange : Colors.black26,
+              shape: BoxShape.circle,
+            ),
           ),
-        ),
-        // Icon
-        Icon(
-          icon,
-          color: Colors.white,
-          size: 20,
-        ),
-        // // Ripple effect
-        // Positioned.fill(
-        //   child: Material(
-        //     color: Colors.transparent,
-        //     child: InkWell(
-        //       onTap: () {
-        //         setState(() {
-        //           _selectedIndex = index;
-        //         });
-        //       },
-        //       borderRadius: BorderRadius.circular(30),
-        //       splashColor: Colors.white.withOpacity(0.5),
-        //       highlightColor: Colors.white.withOpacity(0.2),
-        //       radius: 40,
-        //     ),
-        //   ),
-        // ),
-       
-      ],
+          Icon(
+            icon,
+            color: Colors.white,
+            size: 18,
+          ),
+        ],
+      ),
     ),
-  )
   );
 }
+
+
 }

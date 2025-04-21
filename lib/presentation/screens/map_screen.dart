@@ -7,6 +7,7 @@ import 'package:real_estate_app/core/utils/string_constants.dart';
 import 'package:real_estate_app/presentation/widgets/animated_layer_dialog.dart';
 
 import '../providers/property_provider.dart';
+import '../widgets/ripple_animation.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -258,7 +259,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
             left: 16,
             child: Column(
               children: [
-                GestureDetector(
+                RippleAnimation(
+                  size: 40,
                   onTap: () {
                     print('TAPPED - Layer Button');
                     _toggleLayerOptions();

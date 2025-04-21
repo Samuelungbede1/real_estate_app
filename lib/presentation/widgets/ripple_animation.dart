@@ -30,13 +30,13 @@ class _RippleAnimationState extends State<RippleAnimation>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 800),
     );
 
     _innerRadius = Tween<double>(begin: 3, end: widget.size * 0.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
+        curve: const Interval(0.0, 0.3, curve: Curves.easeOut),
       ),
     );
 
@@ -45,7 +45,7 @@ class _RippleAnimationState extends State<RippleAnimation>
             .animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.2, 0.7, curve: Curves.easeOut),
+        curve: const Interval(0.2, 0.4, curve: Curves.easeOut),
       ),
     );
 
@@ -135,13 +135,13 @@ class _RipplePainter extends CustomPainter {
 
     // Outer circle
     final outerPaint = Paint()
-      ..color = Colors.white.withOpacity(opacity)
+      ..color = Colors.white.withOpacity(0.6)
       ..style = PaintingStyle.stroke
       ..strokeWidth = outerStroke;
 
     // Inner circle
     final innerPaint = Paint()
-      ..color = Colors.white.withOpacity(opacity * 0.8)
+      ..color =Colors.white.withOpacity(0.4)
       ..style = PaintingStyle.stroke
       ..strokeWidth = innerStroke;
 
